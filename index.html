@@ -1,0 +1,2759 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mr. Rocha’s English Class: Reported Speech</title>
+  <!-- Load Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Segoe UI', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Base Typography & Smooth Scrolling */
+    html {
+      scroll-behavior: smooth;
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    /* Shiny Blue Border Styling for Name, Date, and All Answer Boxes */
+    .shiny-blue-box {
+      border: 2.5px solid #0ea5e9 !important;
+      box-shadow:
+        0 0 0 3px rgba(14, 165, 233, 0.18),
+        0 0 14px rgba(56, 189, 248, 0.42),
+        inset 0 1px 2px rgba(255, 255, 255, 0.65);
+      transition: all 0.25s ease;
+    }
+
+    .shiny-blue-box:focus,
+    .shiny-blue-box:focus-within {
+      outline: none;
+      border-color: #2563eb !important;
+      box-shadow:
+        0 0 0 4px rgba(37, 99, 235, 0.25),
+        0 0 20px rgba(14, 165, 233, 0.65),
+        inset 0 1px 3px rgba(255, 255, 255, 0.8);
+    }
+
+    .dark .shiny-blue-box {
+      border-color: #38bdf8 !important;
+      box-shadow:
+        0 0 0 3px rgba(56, 189, 248, 0.22),
+        0 0 16px rgba(14, 165, 233, 0.5),
+        inset 0 1px 2px rgba(186, 230, 253, 0.25);
+    }
+
+    /* Locked State after Check Answers */
+    .locked-correct {
+      border: 2.5px solid #16a34a !important;
+      background-color: rgba(22, 163, 74, 0.1) !important;
+      box-shadow: 0 0 10px rgba(22, 163, 74, 0.25) !important;
+    }
+
+    .locked-incorrect {
+      border: 2.5px solid #dc2626 !important;
+      background-color: rgba(220, 38, 38, 0.1) !important;
+      box-shadow: 0 0 10px rgba(220, 38, 38, 0.25) !important;
+    }
+
+    /* Custom Scrollbar for Step Navigation */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Drag & Drop Tile Styling */
+    .word-tile {
+      user-select: none;
+      touch-action: manipulation;
+      cursor: grab;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    }
+    .word-tile:active {
+      cursor: grabbing;
+      transform: scale(1.04);
+    }
+    .word-tile.locked-tile {
+      cursor: not-allowed;
+      opacity: 0.92;
+    }
+
+    /* Puzzle Slot & Piece Styling */
+    .puzzle-slot {
+      aspect-ratio: 1 / 1;
+      width: 100%;
+      min-height: 48px;
+      transition: background-color 0.15s ease, transform 0.15s ease;
+    }
+    .puzzle-slot.drag-over {
+      background-color: rgba(14, 165, 233, 0.25);
+      transform: scale(0.97);
+    }
+    .puzzle-piece-card {
+      aspect-ratio: 1 / 1;
+      width: 100%;
+      height: 100%;
+      min-height: 54px;
+      display: block;
+      background-size: 600% 400%;
+      background-repeat: no-repeat;
+    }
+
+    /* Print Styles: Start cleanly at the very top of the page */
+    @media print {
+      @page {
+        margin: 0.45in;
+        size: auto;
+      }
+      html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
+      }
+      header,
+      .no-print,
+      .section-panel:not(#section-results) {
+        display: none !important;
+      }
+      main {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+      }
+      #section-results {
+        display: block !important;
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen transition-colors duration-200">
+
+  <!-- STICKY TOP HEADER -->
+  <header class="sticky top-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm no-print">
+    <div class="max-w-6xl mx-auto px-4 py-3">
+      <!-- Top Row: Title + Theme Toggle + Submit Button -->
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 to-blue-700 flex items-center justify-center text-white font-extrabold text-lg shadow-md">
+            MR
+          </div>
+          <div>
+            <h1 class="text-base sm:text-xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
+              Mr. Rocha’s English Class: <span class="text-sky-600 dark:text-sky-400">Reported Speech</span>
+            </h1>
+            <p id="headerStudentBadge" class="text-xs text-slate-500 dark:text-slate-400 font-medium">
+              Interactive Academic Worksheet • Student: <span id="headerStudentName" class="font-semibold text-slate-700 dark:text-slate-200">Guest Student</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+          <!-- Dark / Light Mode Toggle -->
+          <button
+            id="themeToggleBtn"
+            type="button"
+            onclick="toggleTheme()"
+            aria-label="Toggle Dark or Light Mode"
+            class="flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs sm:text-sm font-semibold transition shadow-sm"
+          >
+            <span id="themeIcon">🌙</span>
+            <span id="themeLabel">Dark Mode</span>
+          </button>
+
+          <!-- Submit Button (Always accessible even if incomplete) -->
+          <button
+            type="button"
+            onclick="submitWorksheet()"
+            class="flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition"
+          >
+            <span>📊</span>
+            <span>Submit Worksheet</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="mt-3">
+        <div class="flex items-center justify-between text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">
+          <span id="progressStatusText">Worksheet Progress: 0 of 7 Activities Checked</span>
+          <span id="progressPercentText" class="text-sky-600 dark:text-sky-400 font-bold">0%</span>
+        </div>
+        <div class="w-full h-2.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+          <div
+            id="overallProgressBar"
+            class="h-full bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-600 rounded-full transition-all duration-500"
+            style="width: 0%"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Step Pills Navigation -->
+      <nav aria-label="Activity Navigation" class="mt-2.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+        <button type="button" onclick="goToSection(0)" id="nav-pill-0" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition bg-sky-600 text-white shadow-sm">
+          Intro
+        </button>
+        <button type="button" onclick="goToSection(1)" id="nav-pill-1" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-sky-100 dark:hover:bg-slate-700">
+          1. Video
+        </button>
+        <button type="button" onclick="goToSection(2)" id="nav-pill-2" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-sky-100 dark:hover:bg-slate-700">
+          2. Story
+        </button>
+        <button type="button" onclick="goToSection(3)" id="nav-pill-3" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-sky-100 dark:hover:bg-slate-700">
+          3. Grammar (20)
+        </button>
+        <button type="button" onclick="goToSection(4)" id="nav-pill-4" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-sky-100 dark:hover:bg-slate-700">
+          4. Dictation (8)
+        </button>
+        <button type="button" onclick="goToSection(5)" id="nav-pill-5" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-sky-100 dark:hover:bg-slate-700">
+          5. Puzzle (24)
+        </button>
+        <button type="button" onclick="goToSection(6)" id="nav-pill-6" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-sky-100 dark:hover:bg-slate-700">
+          6. Reading (6)
+        </button>
+        <button type="button" onclick="goToSection(7)" id="nav-pill-7" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-sky-100 dark:hover:bg-slate-700">
+          7. Scramble (10)
+        </button>
+        <button type="button" onclick="submitWorksheet()" id="nav-pill-8" class="nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-200">
+          📊 Results
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- NON-BLOCKING TOAST NOTIFICATION -->
+  <div id="toastBanner" class="fixed bottom-5 right-5 z-50 hidden max-w-sm bg-slate-900 dark:bg-slate-800 text-white border border-sky-400 px-4 py-3 rounded-2xl shadow-2xl text-sm font-medium flex items-center gap-3 no-print">
+    <span id="toastIcon" class="text-lg">ℹ️</span>
+    <span id="toastMessage">Message</span>
+  </div>
+
+  <!-- MAIN WORKSHEET CONTAINER -->
+  <main class="max-w-5xl mx-auto px-4 py-6 sm:py-8">
+
+    <!-- =================================================================== -->
+    <!-- SECTION 0: INTRODUCTION (Image1 ONLY shown here, Name & Date)       -->
+    <!-- =================================================================== -->
+    <section id="section-0" class="section-panel bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300 text-xs font-bold uppercase tracking-wider mb-3">
+        <span>📚</span> Welcome & Student Registration
+      </div>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">
+        Mr. Rocha’s English Class: Reported Speech
+      </h2>
+      <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed mb-6">
+        Welcome! In this interactive digital worksheet, you will master how to report statements, questions, commands, and suggestions in English through video, reading, grammar transformations, audio dictation, a 24-piece visual puzzle, and sentence building.
+      </p>
+
+      <!-- Image1: ONLY displayed in the Introduction, fits completely and correctly -->
+      <div class="mb-6 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/70 p-2 sm:p-3">
+        <img
+          id="introImage1"
+          src="Image1.jpg"
+          alt="Mr. Rocha's English Class Reported Speech Banner"
+          class="w-full h-auto max-h-[460px] object-contain mx-auto rounded-xl"
+          onerror="handleImageFallback(this, 'Image1.jpg', 'Welcome to Mr. Rocha’s English Class: Reported Speech')"
+        />
+      </div>
+
+      <!-- Student Name & Dropdown Calendar -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 bg-slate-50 dark:bg-slate-800/60 p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
+        <div>
+          <label for="studentNameInput" class="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">
+            ✍️ Student Full Name <span class="text-rose-500">*</span>
+          </label>
+          <input
+            type="text"
+            id="studentNameInput"
+            placeholder="Type your full name here..."
+            oninput="updateStudentMeta()"
+            class="shiny-blue-box w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium text-base"
+          />
+        </div>
+
+        <div>
+          <label for="studentDateInput" class="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">
+            📅 Select Date (Dropdown Calendar) <span class="text-rose-500">*</span>
+          </label>
+          <input
+            type="date"
+            id="studentDateInput"
+            onchange="updateStudentMeta()"
+            class="shiny-blue-box w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium text-base cursor-pointer"
+          />
+        </div>
+      </div>
+
+      <!-- Instructions Summary Box -->
+      <div class="mt-6 p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 text-amber-900 dark:text-amber-200 text-xs sm:text-sm space-y-1.5">
+        <p class="font-bold flex items-center gap-2"><span>💡</span> Important Worksheet Rules:</p>
+        <ul class="list-disc list-inside space-y-1 ml-1">
+          <li>Click <strong>Check Answers</strong> inside each activity to see immediate feedback. Once checked, your answers for that activity are locked.</li>
+          <li>Use the <strong>Next Activity</strong> and <strong>Previous Activity</strong> buttons to navigate smoothly to the top of each section.</li>
+          <li>Click <strong>Submit Worksheet</strong> anytime to view your colorful performance charts and 8 personalized study recommendations.</li>
+        </ul>
+      </div>
+
+      <!-- Bottom Navigation -->
+      <div class="mt-8 pt-5 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-end gap-3">
+        <button
+          type="button"
+          onclick="goToSection(1)"
+          class="px-6 py-3 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm sm:text-base shadow-md hover:shadow-lg transition flex items-center gap-2"
+        >
+          <span>Start Activity 1</span>
+          <span>➡️</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- ACTIVITY 1: WATCH THE VIDEO & TELL MR. ROCHA                        -->
+    <!-- =================================================================== -->
+    <section id="section-1" class="section-panel hidden bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <span class="px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 text-xs font-bold uppercase tracking-wider">
+          🎬 Activity 1 of 7 • Video Comprehension
+        </span>
+        <span id="status-badge-1" class="text-xs font-bold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+          Not Checked Yet
+        </span>
+      </div>
+
+      <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white mb-2">
+        Watch the video. Tell Mr. Rocha about the video.
+      </h2>
+      <p class="text-sm text-slate-600 dark:text-slate-300 mb-5">
+        Watch <strong>Video1</strong> carefully. Summarize the key ideas, characters, or examples of reported speech you observed.
+      </p>
+
+      <!-- Full-width responsive Video1 container -->
+      <div class="w-full rounded-2xl overflow-hidden bg-black border border-slate-300 dark:border-slate-700 shadow-lg mb-6">
+        <video
+          id="video1Player"
+          src="Video1.mp4"
+          controls
+          playsinline
+          class="w-full h-auto max-h-[72vh] object-contain block mx-auto"
+          onerror="handleVideoFallback(this)"
+        >
+          Your browser does not support the HTML5 video tag. Please ensure Video1.mp4 is in the same folder.
+        </video>
+        <div id="video1Fallback" class="hidden p-8 text-center bg-slate-900 text-slate-200">
+          <div class="text-4xl mb-2">🎥</div>
+          <p class="font-bold text-lg text-sky-400">Video1.mp4 Ready Frame</p>
+          <p class="text-xs text-slate-400 mt-1">Place <code>Video1.mp4</code> in the same folder as this HTML file to play the lesson video automatically.</p>
+        </div>
+      </div>
+
+      <!-- Student Written Response -->
+      <div class="mb-5">
+        <label for="act1Response" class="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">
+          ✍️ Tell Mr. Rocha about the video (write at least 2–3 complete sentences):
+        </label>
+        <textarea
+          id="act1Response"
+          rows="5"
+          placeholder="Dear Mr. Rocha, in the video I watched..."
+          class="shiny-blue-box w-full p-4 rounded-2xl bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-base leading-relaxed"
+        ></textarea>
+      </div>
+
+      <!-- Check Answers & Feedback -->
+      <div class="flex flex-wrap items-center gap-4">
+        <button
+          type="button"
+          id="checkBtn-1"
+          onclick="checkActivity1()"
+          class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md transition flex items-center gap-2"
+        >
+          <span>✅</span>
+          <span>Check Answers</span>
+        </button>
+      </div>
+      <div id="feedback-1" class="hidden mt-4 p-4 rounded-2xl border text-sm font-medium"></div>
+
+      <!-- Previous / Next Navigation -->
+      <div class="mt-8 pt-5 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+        <button
+          type="button"
+          onclick="goToSection(0)"
+          class="px-5 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 font-bold text-sm transition flex items-center gap-2"
+        >
+          <span>⬅️</span>
+          <span>Previous Activity</span>
+        </button>
+        <button
+          type="button"
+          onclick="goToSection(2)"
+          class="px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm shadow-md transition flex items-center gap-2"
+        >
+          <span>Next Activity</span>
+          <span>➡️</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- ACTIVITY 2: READ THE STORY (Image2) & TELL MR. ROCHA                -->
+    <!-- =================================================================== -->
+    <section id="section-2" class="section-panel hidden bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <span class="px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 text-xs font-bold uppercase tracking-wider">
+          📖 Activity 2 of 7 • Visual Story Reading
+        </span>
+        <span id="status-badge-2" class="text-xs font-bold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+          Not Checked Yet
+        </span>
+      </div>
+
+      <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white mb-2">
+        Read the story. Tell Mr. Rocha what it is about.
+      </h2>
+      <p class="text-sm text-slate-600 dark:text-slate-300 mb-5">
+        Examine <strong>Image2</strong> closely, read every part of the story, and write a clear summary in your own words.
+      </p>
+
+      <!-- Full-width responsive Image2 container -->
+      <div class="w-full rounded-2xl overflow-hidden border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 p-2 sm:p-3 mb-6">
+        <img
+          id="storyImage2"
+          src="Image2.jpg"
+          alt="Story Illustration Image2"
+          class="w-full h-auto object-contain mx-auto rounded-xl"
+          onerror="handleImageFallback(this, 'Image2.jpg', 'Story Comic / Reading Illustration (Image2.jpg)')"
+        />
+      </div>
+
+      <!-- Student Written Summary -->
+      <div class="mb-5">
+        <label for="act2Response" class="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">
+          ✍️ Tell Mr. Rocha what the story is about (write at least 2–3 complete sentences):
+        </label>
+        <textarea
+          id="act2Response"
+          rows="5"
+          placeholder="Dear Mr. Rocha, this story is about..."
+          class="shiny-blue-box w-full p-4 rounded-2xl bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-base leading-relaxed"
+        ></textarea>
+      </div>
+
+      <!-- Check Answers & Feedback -->
+      <div class="flex flex-wrap items-center gap-4">
+        <button
+          type="button"
+          id="checkBtn-2"
+          onclick="checkActivity2()"
+          class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md transition flex items-center gap-2"
+        >
+          <span>✅</span>
+          <span>Check Answers</span>
+        </button>
+      </div>
+      <div id="feedback-2" class="hidden mt-4 p-4 rounded-2xl border text-sm font-medium"></div>
+
+      <!-- Previous / Next Navigation -->
+      <div class="mt-8 pt-5 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+        <button
+          type="button"
+          onclick="goToSection(1)"
+          class="px-5 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 font-bold text-sm transition flex items-center gap-2"
+        >
+          <span>⬅️</span>
+          <span>Previous Activity</span>
+        </button>
+        <button
+          type="button"
+          onclick="goToSection(3)"
+          class="px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm shadow-md transition flex items-center gap-2"
+        >
+          <span>Next Activity</span>
+          <span>➡️</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- ACTIVITY 3: COMPLETE GRAMMAR GUIDE, CHARTS & 20 PRACTICE SENTENCES  -->
+    <!-- =================================================================== -->
+    <section id="section-3" class="section-panel hidden bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <span class="px-3 py-1 rounded-full bg-sky-100 dark:bg-sky-900/50 text-sky-700 dark:text-sky-300 text-xs font-bold uppercase tracking-wider">
+          📘 Activity 3 of 7 • Grammar Lesson & 20-Sentence Drill
+        </span>
+        <span id="status-badge-3" class="text-xs font-bold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+          Not Checked Yet
+        </span>
+      </div>
+
+      <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white mb-2">
+        Mastering Reported Speech (Indirect Speech)
+      </h2>
+      <p class="text-sm text-slate-600 dark:text-slate-300 mb-6">
+        Study the complete grammar guide, reporting verbs, and transformation charts below, then convert all <strong>20 direct speech sentences</strong> into reported speech.
+      </p>
+
+      <!-- GRAMMAR EXPLANATION CARDS -->
+      <div class="space-y-6 mb-8">
+        <!-- 1. Sentence Types & Reporting Verbs -->
+        <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+          <h3 class="text-lg font-extrabold text-sky-700 dark:text-sky-400 mb-3 flex items-center gap-2">
+            <span>1️⃣</span> How Reported Speech Works Across Sentence Types & Reporting Verbs
+          </h3>
+          <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+            When we report what someone said without quoting their exact words, we remove quotation marks (<code>" "</code>), adjust <strong>pronouns</strong>, shift <strong>verb tenses one step into the past</strong> (backshifting), and update <strong>time/place expressions</strong>. We also choose accurate reporting verbs such as <em>said, told, asked, warned, advised, suggested, promised, denied, explained,</em> and <em>reminded</em>.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+            <!-- Affirmative -->
+            <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-800/60">
+              <span class="inline-block px-2.5 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300 font-bold mb-1.5">
+                Affirmative Statements
+              </span>
+              <p class="text-slate-600 dark:text-slate-400 mb-1"><strong>Direct:</strong> "I work at the hospital," Elena said.</p>
+              <p class="text-slate-900 dark:text-white font-semibold"><strong>Reported:</strong> Elena <span class="text-sky-600 dark:text-sky-400">said (that)</span> she worked at the hospital.</p>
+              <p class="text-slate-600 dark:text-slate-400 mt-2 mb-1"><strong>Direct:</strong> "I will help you tomorrow," Leo told me.</p>
+              <p class="text-slate-900 dark:text-white font-semibold"><strong>Reported:</strong> Leo <span class="text-sky-600 dark:text-sky-400">promised</span> to help me the next day.</p>
+            </div>
+
+            <!-- Negative -->
+            <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-rose-200 dark:border-rose-800/60">
+              <span class="inline-block px-2.5 py-0.5 rounded-md bg-rose-100 dark:bg-rose-900/50 text-rose-800 dark:text-rose-300 font-bold mb-1.5">
+                Negative Statements
+              </span>
+              <p class="text-slate-600 dark:text-slate-400 mb-1"><strong>Direct:</strong> "We don't like cold weather," they said.</p>
+              <p class="text-slate-900 dark:text-white font-semibold"><strong>Reported:</strong> They <span class="text-sky-600 dark:text-sky-400">explained (that)</span> they didn't like cold weather.</p>
+              <p class="text-slate-600 dark:text-slate-400 mt-2 mb-1"><strong>Direct:</strong> "I didn't steal the keys," he said.</p>
+              <p class="text-slate-900 dark:text-white font-semibold"><strong>Reported:</strong> He <span class="text-sky-600 dark:text-sky-400">denied</span> stealing the keys.</p>
+            </div>
+
+            <!-- Interrogative -->
+            <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-800/60">
+              <span class="inline-block px-2.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300 font-bold mb-1.5">
+                Interrogative (Questions — No Question Mark!)
+              </span>
+              <p class="text-slate-600 dark:text-slate-400 mb-1"><strong>Yes/No Direct:</strong> "Are you ready?" she asked me.</p>
+              <p class="text-slate-900 dark:text-white font-semibold"><strong>Reported:</strong> She <span class="text-sky-600 dark:text-sky-400">asked me if/whether</span> I was ready.</p>
+              <p class="text-slate-600 dark:text-slate-400 mt-2 mb-1"><strong>Wh- Direct:</strong> "Where do you live?" he asked.</p>
+              <p class="text-slate-900 dark:text-white font-semibold"><strong>Reported:</strong> He <span class="text-sky-600 dark:text-sky-400">asked where</span> I lived. <em>(Statement word order)</em></p>
+            </div>
+
+            <!-- Commands & Suggestions -->
+            <div class="p-4 rounded-xl bg-white dark:bg-slate-900 border border-indigo-200 dark:border-indigo-800/60">
+              <span class="inline-block px-2.5 py-0.5 rounded-md bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-300 font-bold mb-1.5">
+                Commands, Advice & Suggestions
+              </span>
+              <p class="text-slate-600 dark:text-slate-400 mb-1"><strong>Command:</strong> "Open your books," the teacher told us.</p>
+              <p class="text-slate-900 dark:text-white font-semibold"><strong>Reported:</strong> The teacher <span class="text-sky-600 dark:text-sky-400">told us to open</span> our books.</p>
+              <p class="text-slate-600 dark:text-slate-400 mt-2 mb-1"><strong>Negative Warning:</strong> "Don't run!" she warned him.</p>
+              <p class="text-slate-900 dark:text-white font-semibold"><strong>Reported:</strong> She <span class="text-sky-600 dark:text-sky-400">warned him not to run</span>. / He <span class="text-sky-600 dark:text-sky-400">suggested going</span> home.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Tense Backshift Chart & Time/Place Changes Chart -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <!-- Tense Chart -->
+          <div class="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+            <div class="bg-gradient-to-r from-sky-600 to-blue-700 text-white px-4 py-3 font-bold text-sm flex items-center gap-2">
+              <span>📊</span> Chart A: Verb Tense Backshift
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs sm:text-sm">
+                <thead class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold">
+                  <tr>
+                    <th class="px-3.5 py-2.5">Direct Speech Tense</th>
+                    <th class="px-3.5 py-2.5">Reported Speech Tense</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                  <tr><td class="px-3.5 py-2 font-medium">Present Simple (<em>play / plays</em>)</td><td class="px-3.5 py-2 text-sky-700 dark:text-sky-400 font-semibold">Past Simple (<em>played</em>)</td></tr>
+                  <tr><td class="px-3.5 py-2 font-medium">Present Continuous (<em>am/is/are playing</em>)</td><td class="px-3.5 py-2 text-sky-700 dark:text-sky-400 font-semibold">Past Continuous (<em>was/were playing</em>)</td></tr>
+                  <tr><td class="px-3.5 py-2 font-medium">Past Simple (<em>played</em>)</td><td class="px-3.5 py-2 text-sky-700 dark:text-sky-400 font-semibold">Past Perfect (<em>had played</em>)</td></tr>
+                  <tr><td class="px-3.5 py-2 font-medium">Present Perfect (<em>have/has played</em>)</td><td class="px-3.5 py-2 text-sky-700 dark:text-sky-400 font-semibold">Past Perfect (<em>had played</em>)</td></tr>
+                  <tr><td class="px-3.5 py-2 font-medium">Future <em>will</em> (<em>will play</em>)</td><td class="px-3.5 py-2 text-sky-700 dark:text-sky-400 font-semibold">Conditional <em>would</em> (<em>would play</em>)</td></tr>
+                  <tr><td class="px-3.5 py-2 font-medium">Modal <em>can</em> / <em>must</em></td><td class="px-3.5 py-2 text-sky-700 dark:text-sky-400 font-semibold"><em>could</em> / <em>had to</em></td></tr>
+                  <tr><td class="px-3.5 py-2 font-medium">Imperative (<em>"Study!" / "Don't talk!"</em>)</td><td class="px-3.5 py-2 text-sky-700 dark:text-sky-400 font-semibold">Infinitive (<em>to study / not to talk</em>)</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Time, Place & Pronoun Changes Chart -->
+          <div class="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-700 text-white px-4 py-3 font-bold text-sm flex items-center gap-2">
+              <span>🕒</span> Chart B: Time, Place & Demonstrative Changes
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs sm:text-sm">
+                <thead class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold">
+                  <tr>
+                    <th class="px-3.5 py-2.5">Direct Speech Word</th>
+                    <th class="px-3.5 py-2.5">Reported Speech Word</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
+                  <tr><td class="px-3.5 py-2 font-medium">now</td><td class="px-3.5 py-2 text-indigo-600 dark:text-indigo-400 font-semibold">then / at that moment</td></tr>
+                  <tr><td class="px-3.5 py-2 font-medium">today / tonight</td><td class="px-3.5 py-2 text-indigo-600 dark:text-indigo-400 font-semibold">that day / that night</td></tr>
+                  <tr><td class="px-3.5 py-2 font-medium">tomorrow</td><td class="px-3.5 py-2 text-indigo-600 dark:text-indigo-400 font-semibold">the next day / the following day</td></tr>
+                  <tr><td class="px-3.5 py-2 font-medium">yesterday</td><td class="px-3.5 py-2 text-indigo-600 dark:text-indigo-400 font-semibold">the day before / the previous day</td></tr>
+                  <tr><td class="px-3.5 py-2 font-medium">next week / last week</td><td class="px-3.5 py-2 text-indigo-600 dark:text-indigo-400 font-semibold">the following week / the week before</td></tr>
+                  <tr><td class="px-3.5 py-2 font-medium">here</td><td class="px-3.5 py-2 text-indigo-600 dark:text-indigo-400 font-semibold">there</td></tr>
+                  <tr><td class="px-3.5 py-2 font-medium">this / these</td><td class="px-3.5 py-2 text-indigo-600 dark:text-indigo-400 font-semibold">that / those</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 20 INTERACTIVE SENTENCE TRANSFORMATIONS -->
+      <div class="mb-4">
+        <h3 class="text-lg font-extrabold text-slate-900 dark:text-white mb-1">
+          ✍️ Practice Exercise: Convert 20 Sentences into Reported Speech
+        </h3>
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mb-4">
+          Complete each reported speech sentence using the prompt provided. Pay close attention to tense backshift, pronouns, time expressions, and reporting verb structures!
+        </p>
+
+        <div id="act3QuestionsContainer" class="space-y-4">
+          <!-- Rendered dynamically by JS -->
+        </div>
+      </div>
+
+      <!-- Check Answers & Feedback -->
+      <div class="mt-6 flex flex-wrap items-center gap-4">
+        <button
+          type="button"
+          id="checkBtn-3"
+          onclick="checkActivity3()"
+          class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md transition flex items-center gap-2"
+        >
+          <span>✅</span>
+          <span>Check Answers</span>
+        </button>
+      </div>
+      <div id="feedback-3" class="hidden mt-4 p-4 rounded-2xl border text-sm font-medium"></div>
+
+      <!-- Previous / Next Navigation -->
+      <div class="mt-8 pt-5 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+        <button
+          type="button"
+          onclick="goToSection(2)"
+          class="px-5 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 font-bold text-sm transition flex items-center gap-2"
+        >
+          <span>⬅️</span>
+          <span>Previous Activity</span>
+        </button>
+        <button
+          type="button"
+          onclick="goToSection(4)"
+          class="px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm shadow-md transition flex items-center gap-2"
+        >
+          <span>Next Activity</span>
+          <span>➡️</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- ACTIVITY 4: LISTEN AND WRITE (Audio1 - Audio8)                      -->
+    <!-- =================================================================== -->
+    <section id="section-4" class="section-panel hidden bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <span class="px-3 py-1 rounded-full bg-teal-100 dark:bg-teal-900/50 text-teal-700 dark:text-teal-300 text-xs font-bold uppercase tracking-wider">
+          🎧 Activity 4 of 7 • Audio Dictation (8 Sentences)
+        </span>
+        <span id="status-badge-4" class="text-xs font-bold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+          Not Checked Yet
+        </span>
+      </div>
+
+      <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white mb-2">
+        Listen and write.
+      </h2>
+      <p class="text-sm text-slate-600 dark:text-slate-300 mb-6">
+        Play each audio clip (<strong>Audio1</strong> through <strong>Audio8</strong>) and type the exact reported speech sentence you hear in each box.
+      </p>
+
+      <div id="act4Container" class="space-y-5">
+        <!-- Rendered dynamically by JS for Audio1..Audio8 -->
+      </div>
+
+      <!-- Check Answers & Feedback -->
+      <div class="mt-6 flex flex-wrap items-center gap-4">
+        <button
+          type="button"
+          id="checkBtn-4"
+          onclick="checkActivity4()"
+          class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md transition flex items-center gap-2"
+        >
+          <span>✅</span>
+          <span>Check Answers</span>
+        </button>
+      </div>
+      <div id="feedback-4" class="hidden mt-4 p-4 rounded-2xl border text-sm font-medium"></div>
+
+      <!-- Previous / Next Navigation -->
+      <div class="mt-8 pt-5 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+        <button
+          type="button"
+          onclick="goToSection(3)"
+          class="px-5 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 font-bold text-sm transition flex items-center gap-2"
+        >
+          <span>⬅️</span>
+          <span>Previous Activity</span>
+        </button>
+        <button
+          type="button"
+          onclick="goToSection(5)"
+          class="px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm shadow-md transition flex items-center gap-2"
+        >
+          <span>Next Activity</span>
+          <span>➡️</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- ACTIVITY 5: 24-SQUARE IMAGE PUZZLE (Image3)                         -->
+    <!-- =================================================================== -->
+    <section id="section-5" class="section-panel hidden bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <span class="px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 text-xs font-bold uppercase tracking-wider">
+          🧩 Activity 5 of 7 • 24-Piece Visual Reconstruction
+        </span>
+        <span id="status-badge-5" class="text-xs font-bold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+          Not Checked Yet
+        </span>
+      </div>
+
+      <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white mb-2">
+        Reconstruct Image3 (24 Squares Puzzle)
+      </h2>
+      <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">
+        Drag and drop (or tap a piece, then tap a target square on mobile/tablet) each of the <strong>24 shuffled squares</strong> onto the puzzle board to match the target image.
+      </p>
+
+      <!-- Timer & Do Again Controls -->
+      <div class="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 mb-6">
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-2 text-base sm:text-lg font-extrabold text-slate-800 dark:text-white">
+            <span>⏱️ Timer:</span>
+            <span id="puzzleTimerDisplay" class="font-mono text-sky-600 dark:text-sky-400">00:00</span>
+          </div>
+          <span id="puzzlePlacedCount" class="text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300">
+            Placed: 0 / 24
+          </span>
+        </div>
+
+        <button
+          type="button"
+          id="puzzleDoAgainBtn"
+          onclick="resetPuzzle()"
+          class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs sm:text-sm shadow transition flex items-center gap-1.5"
+        >
+          <span>🔄</span>
+          <span>Do Again</span>
+        </button>
+      </div>
+
+      <!-- Puzzle Workspace: Board + Target Reference + Shuffled Piece Tray -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <!-- Left 8 Cols: 6x4 Target Drop Grid -->
+        <div class="lg:col-span-8">
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
+            🎯 Puzzle Canvas (Drop 24 Squares Here — 6 × 4 Grid)
+          </div>
+          <div
+            id="puzzleTargetBoard"
+            class="shiny-blue-box grid grid-cols-6 gap-0.5 bg-slate-300 dark:bg-slate-700 p-1.5 rounded-2xl overflow-hidden select-none"
+          >
+            <!-- 24 Target Slots generated by JS -->
+          </div>
+        </div>
+
+        <!-- Right 4 Cols: Target Image3 Reference Preview -->
+        <div class="lg:col-span-4 space-y-4">
+          <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700">
+            <div class="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2 flex items-center justify-between">
+              <span>🖼️ Target Image3</span>
+              <span class="text-[11px] text-sky-600 dark:text-sky-400">Reference</span>
+            </div>
+            <img
+              id="targetImage3Preview"
+              src="Image3.jpg"
+              alt="Target Reference Image3"
+              class="w-full h-auto rounded-xl border border-slate-300 dark:border-slate-600 object-contain"
+            />
+          </div>
+
+          <div class="p-3 rounded-2xl bg-sky-50 dark:bg-sky-950/30 border border-sky-200 dark:border-sky-800/60 text-xs text-sky-900 dark:text-sky-200">
+            <strong>Tip:</strong> You can drag pieces from the tray below into the grid, swap pieces between grid slots, or tap a piece and tap a slot!
+          </div>
+        </div>
+      </div>
+
+      <!-- Shuffled Pieces Tray -->
+      <div class="mt-6">
+        <div class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
+          🧩 Shuffled Pieces Tray
+        </div>
+        <div
+          id="puzzlePiecesTray"
+          ondragover="event.preventDefault()"
+          ondrop="handleDropToTray(event)"
+          class="min-h-[110px] p-3 rounded-2xl bg-slate-100 dark:bg-slate-800/80 border-2 border-dashed border-slate-300 dark:border-slate-700 grid grid-cols-6 sm:grid-cols-8 md:grid-cols-12 gap-2"
+        >
+          <!-- Shuffled tiles rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Check Answers & Feedback -->
+      <div class="mt-6 flex flex-wrap items-center gap-4">
+        <button
+          type="button"
+          id="checkBtn-5"
+          onclick="checkActivity5()"
+          class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md transition flex items-center gap-2"
+        >
+          <span>✅</span>
+          <span>Check Answers</span>
+        </button>
+      </div>
+      <div id="feedback-5" class="hidden mt-4 p-4 rounded-2xl border text-sm font-medium"></div>
+
+      <!-- Previous / Next Navigation -->
+      <div class="mt-8 pt-5 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+        <button
+          type="button"
+          onclick="goToSection(4)"
+          class="px-5 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 font-bold text-sm transition flex items-center gap-2"
+        >
+          <span>⬅️</span>
+          <span>Previous Activity</span>
+        </button>
+        <button
+          type="button"
+          onclick="goToSection(6)"
+          class="px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm shadow-md transition flex items-center gap-2"
+        >
+          <span>Next Activity</span>
+          <span>➡️</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- ACTIVITY 6: LISTEN & READ ("The Real Sherlock Holmes" + Audio9)     -->
+    <!-- =================================================================== -->
+    <section id="section-6" class="section-panel hidden bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <span class="px-3 py-1 rounded-full bg-rose-100 dark:bg-rose-900/50 text-rose-700 dark:text-rose-300 text-xs font-bold uppercase tracking-wider">
+          🕵️ Activity 6 of 7 • Listen, Read & Comprehend
+        </span>
+        <span id="status-badge-6" class="text-xs font-bold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+          Not Checked Yet
+        </span>
+      </div>
+
+      <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white mb-2">
+        Listen and read. Select the correct answer.
+      </h2>
+      <p class="text-sm text-slate-600 dark:text-slate-300 mb-5">
+        Listen to <strong>Audio9</strong> while reading the passage <em>“The Real Sherlock Holmes”</em>, then answer the 6 multiple-choice questions.
+      </p>
+
+      <!-- Audio9 Player -->
+      <div class="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 mb-6">
+        <div class="text-xs font-bold uppercase tracking-wider text-sky-700 dark:text-sky-400 mb-2 flex items-center gap-2">
+          <span>🔊</span> Audio9 — Reading Narration
+        </div>
+        <audio
+          src="Audio9.mp3"
+          controls
+          class="w-full"
+          onerror="handleAudioFallback(this, 'Audio9.mp3')"
+        >
+          Your browser does not support audio playback.
+        </audio>
+        <p class="audio-fallback-msg hidden text-xs text-amber-600 dark:text-amber-400 mt-1.5">
+          Note: Place <code>Audio9.mp3</code> in the same folder as this HTML file to play the narration.
+        </p>
+      </div>
+
+      <!-- Reading Passage: The Real Sherlock Holmes -->
+      <article class="p-5 sm:p-7 rounded-2xl bg-amber-50/60 dark:bg-slate-800/60 border border-amber-200/80 dark:border-slate-700 mb-8 space-y-4 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base">
+        <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white border-b border-amber-200 dark:border-slate-700 pb-2">
+          The Real Sherlock Holmes
+        </h3>
+        <p>
+          Before Sherlock Holmes became the most famous detective in fiction, his creator, Arthur Conan Doyle, studied medicine in Edinburgh under Dr Joseph Bell. Bell was a respected surgeon who treated observation as a discipline. He told his students that they should notice details before forming theories, and he warned them that a careless glance could hide the most important clue.
+        </p>
+        <p>
+          Doyle later recalled that Bell could examine a stranger and announce where the person had worked or travelled. According to one famous account, Bell asked a patient whether he had recently served in a Highland regiment, and the man admitted that he had. Bell then explained that the patient had kept his hat on, a habit of military life, and that his skin complaint was common in the West Indies. Retellings differ, however, and historians suspect that some details were improved over the years.
+        </p>
+        <p>
+          Bell insisted that his method was not magic. He suggested that anyone could learn it through practice, and he reminded students that every conclusion must be tested against further evidence. Doyle acknowledged that Bell had inspired Holmes, yet Bell modestly denied deserving the credit and claimed that Doyle had created the character himself.
+        </p>
+        <p>
+          Today, scholars still debate how closely the fictional detective resembled his real-life model. Nevertheless, the lesson attributed to Bell remains useful: strong conclusions begin with careful observation, and confident explanations must always depend on evidence rather than assumption.
+        </p>
+      </article>
+
+      <!-- 6 Multiple-Choice Questions -->
+      <div id="act6QuestionsContainer" class="space-y-6">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Check Answers & Feedback -->
+      <div class="mt-6 flex flex-wrap items-center gap-4">
+        <button
+          type="button"
+          id="checkBtn-6"
+          onclick="checkActivity6()"
+          class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md transition flex items-center gap-2"
+        >
+          <span>✅</span>
+          <span>Check Answers</span>
+        </button>
+      </div>
+      <div id="feedback-6" class="hidden mt-4 p-4 rounded-2xl border text-sm font-medium"></div>
+
+      <!-- Previous / Next Navigation -->
+      <div class="mt-8 pt-5 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+        <button
+          type="button"
+          onclick="goToSection(5)"
+          class="px-5 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 font-bold text-sm transition flex items-center gap-2"
+        >
+          <span>⬅️</span>
+          <span>Previous Activity</span>
+        </button>
+        <button
+          type="button"
+          onclick="goToSection(7)"
+          class="px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm shadow-md transition flex items-center gap-2"
+        >
+          <span>Next Activity</span>
+          <span>➡️</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- ACTIVITY 7: DRAG & DROP SENTENCE SCRAMBLE + AUDIO PRONUNCIATION     -->
+    <!-- =================================================================== -->
+    <section id="section-7" class="section-panel hidden bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider">
+          🔤 Activity 7 of 7 • Sentence Construction & Listening (10 Sentences)
+        </span>
+        <span id="status-badge-7" class="text-xs font-bold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+          Not Checked Yet
+        </span>
+      </div>
+
+      <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white mb-2">
+        Build Reported Speech Sentences (Drag & Drop + Audio)
+      </h2>
+      <p class="text-sm text-slate-600 dark:text-slate-300 mb-6">
+        Click the <strong>🔊 Listen</strong> button on each item to hear the complete sentence read aloud. Then drag and drop (or tap) the shuffled words into the shiny blue answer box in the exact right order.
+      </p>
+
+      <div id="act7Container" class="space-y-6">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Check Answers & Feedback -->
+      <div class="mt-6 flex flex-wrap items-center gap-4">
+        <button
+          type="button"
+          id="checkBtn-7"
+          onclick="checkActivity7()"
+          class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md transition flex items-center gap-2"
+        >
+          <span>✅</span>
+          <span>Check Answers</span>
+        </button>
+      </div>
+      <div id="feedback-7" class="hidden mt-4 p-4 rounded-2xl border text-sm font-medium"></div>
+
+      <!-- Previous / Submit Final Results Navigation -->
+      <div class="mt-8 pt-5 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+        <button
+          type="button"
+          onclick="goToSection(6)"
+          class="px-5 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 font-bold text-sm transition flex items-center gap-2"
+        >
+          <span>⬅️</span>
+          <span>Previous Activity</span>
+        </button>
+        <button
+          type="button"
+          onclick="submitWorksheet()"
+          class="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-extrabold text-sm sm:text-base shadow-lg transition flex items-center gap-2"
+        >
+          <span>📊</span>
+          <span>Submit & View Final Results</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- RESULTS REPORT SCREEN (Graphs, Bars, Charts, 8 Recommendations)     -->
+    <!-- =================================================================== -->
+    <section id="section-results" class="section-panel hidden bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-8">
+      <!-- Top Action Bar (Hidden on Print) -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-5 mb-6 border-b border-slate-200 dark:border-slate-800 no-print">
+        <button
+          type="button"
+          onclick="goToSection(lastActiveSection)"
+          class="px-4 py-2 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 font-bold text-xs sm:text-sm transition flex items-center gap-2"
+        >
+          <span>⬅️</span>
+          <span>Return to Worksheet</span>
+        </button>
+
+        <button
+          type="button"
+          onclick="printWorksheetResults()"
+          class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white font-bold text-xs sm:text-sm shadow-md transition flex items-center gap-2"
+        >
+          <span>🖨️</span>
+          <span>Print Results</span>
+        </button>
+      </div>
+
+      <!-- Report Header -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-700 text-white p-6 rounded-2xl shadow-md mb-6">
+        <div>
+          <span class="inline-block px-3 py-0.5 rounded-full bg-white/20 text-xs font-bold uppercase tracking-wider mb-2">
+            Official Academic Performance Report
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold">
+            Mr. Rocha’s English Class: Reported Speech
+          </h2>
+          <div class="mt-2 flex flex-wrap gap-x-6 gap-y-1 text-xs sm:text-sm text-sky-100">
+            <span><strong>Student:</strong> <span id="reportStudentName">Student</span></span>
+            <span><strong>Date:</strong> <span id="reportStudentDate">—</span></span>
+            <span><strong>Activities Completed:</strong> <span id="reportCompletedCount">0 / 7</span></span>
+          </div>
+        </div>
+
+        <div class="bg-white/15 backdrop-blur-sm border border-white/30 rounded-2xl px-6 py-4 text-center shrink-0">
+          <div class="text-xs uppercase font-bold tracking-wider text-sky-100">Overall Score</div>
+          <div id="reportOverallPercent" class="text-4xl sm:text-5xl font-black mt-0.5">0%</div>
+          <div id="reportGradeLabel" class="text-xs font-bold mt-1 px-2.5 py-0.5 rounded-full bg-white text-blue-800 inline-block">
+            Needs Practice
+          </div>
+        </div>
+      </div>
+
+      <!-- Personalized Feedback Banner from Mr. Rocha -->
+      <div id="reportTeacherFeedback" class="p-5 rounded-2xl bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800/70 text-slate-800 dark:text-slate-200 mb-8">
+        <!-- Populated dynamically -->
+      </div>
+
+      <!-- COLORFUL CHARTS & GRAPHS GRID -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+        <!-- Chart 1: Colorful Activity Bar Graph (7 Columns) -->
+        <div class="lg:col-span-7 p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+          <h3 class="text-base font-extrabold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+            <span>📊</span> Activity Score Comparison (Bar Graph)
+          </h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Percentage achieved in each of the 7 worksheet activities</p>
+          <div id="colorfulBarChart" class="h-60 flex items-end justify-between gap-2 sm:gap-4 pt-6 pb-2 px-2 border-b border-slate-300 dark:border-slate-600">
+            <!-- Bars rendered by JS -->
+          </div>
+          <div class="grid grid-cols-7 gap-1 text-center text-[11px] font-bold text-slate-600 dark:text-slate-300 mt-2">
+            <div>Act 1</div>
+            <div>Act 2</div>
+            <div>Act 3</div>
+            <div>Act 4</div>
+            <div>Act 5</div>
+            <div>Act 6</div>
+            <div>Act 7</div>
+          </div>
+        </div>
+
+        <!-- Chart 2: Colorful Mastery Doughnut Chart (5 Columns) -->
+        <div class="lg:col-span-5 p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
+          <div>
+            <h3 class="text-base font-extrabold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+              <span>🍩</span> Overall Point Distribution
+            </h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Earned vs. Missed vs. Unattempted points</p>
+          </div>
+
+          <div class="flex flex-col sm:flex-row lg:flex-col items-center justify-center gap-4 my-auto">
+            <div class="relative w-40 h-40">
+              <svg viewBox="0 0 36 36" class="w-full h-full -rotate-90">
+                <circle cx="18" cy="18" r="15.915" fill="transparent" stroke="#cbd5e1" stroke-width="3.8" class="dark:stroke-slate-700"></circle>
+                <circle id="donutEarnedSeg" cx="18" cy="18" r="15.915" fill="transparent" stroke="#10b981" stroke-width="3.8" stroke-dasharray="0 100" stroke-dashoffset="0"></circle>
+                <circle id="donutMissedSeg" cx="18" cy="18" r="15.915" fill="transparent" stroke="#f43f5e" stroke-width="3.8" stroke-dasharray="0 100" stroke-dashoffset="0"></circle>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                <span id="donutCenterScore" class="text-2xl font-black text-slate-900 dark:text-white">0%</span>
+                <span class="text-[10px] font-bold uppercase text-slate-500 dark:text-slate-400">Mastery</span>
+              </div>
+            </div>
+
+            <div class="space-y-1.5 text-xs font-semibold w-full">
+              <div class="flex items-center justify-between">
+                <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> Earned Points</span>
+                <span id="legendEarned" class="font-bold">0 pts</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span> Incorrect / Lost</span>
+                <span id="legendMissed" class="font-bold">0 pts</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-slate-400 inline-block"></span> Unchecked / Pending</span>
+                <span id="legendPending" class="font-bold">0 pts</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart 3: Colorful Skill Mastery Horizontal Bars + Detailed Activity Scorecards -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+        <!-- Skill Horizontal Bars -->
+        <div class="lg:col-span-5 p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+          <h3 class="text-base font-extrabold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+            <span>🌈</span> English Skill Breakdown
+          </h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Performance across core language competencies</p>
+          <div id="skillBarsContainer" class="space-y-4">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Activity-by-Activity Breakdown Table -->
+        <div class="lg:col-span-7 p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+          <h3 class="text-base font-extrabold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+            <span>📋</span> Detailed Activity Score Breakdown
+          </h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs sm:text-sm">
+              <thead class="bg-slate-200/80 dark:bg-slate-700/80 text-slate-800 dark:text-slate-100 font-bold">
+                <tr>
+                  <th class="px-3 py-2 rounded-tl-lg">Activity</th>
+                  <th class="px-3 py-2">Status</th>
+                  <th class="px-3 py-2">Score</th>
+                  <th class="px-3 py-2 rounded-tr-lg">Accuracy</th>
+                </tr>
+              </thead>
+              <tbody id="activityBreakdownTableBody" class="divide-y divide-slate-200 dark:divide-slate-700">
+                <!-- Rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 SPECIFIC PERSONALIZED RECOMMENDATIONS -->
+      <div class="p-6 rounded-2xl bg-gradient-to-br from-indigo-50 via-sky-50 to-emerald-50 dark:from-slate-800 dark:via-slate-800/90 dark:to-slate-900 border border-sky-200 dark:border-sky-800/60">
+        <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
+          <span>🎯</span> 8 Specific Recommendations Based on Your Answers & Results
+        </h3>
+        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mb-5">
+          Mr. Rocha’s diagnostic engine analyzed your responses across all activities to generate these 8 targeted action steps:
+        </p>
+
+        <div id="recommendationsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- 8 dynamic recommendation cards rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    /* =========================================================================
+       DATA & CURRICULUM DEFINITIONS
+    ========================================================================= */
+
+    // Activity 3: 20 Direct-to-Reported Speech Transformation Items
+    const ACT3_ITEMS = [
+      {
+        id: 1,
+        type: "Affirmative",
+        direct: '"I study English every evening," Sofia said.',
+        prefix: "Sofia said that",
+        answers: ["she studied english every evening"],
+        sample: "Sofia said that she studied English every evening.",
+        rule: "Present Simple ('study') backshifts to Past Simple ('studied')."
+      },
+      {
+        id: 2,
+        type: "Affirmative",
+        direct: '"We are watching a documentary now," the boys said.',
+        prefix: "The boys said that",
+        answers: ["they were watching a documentary then", "they were watching a documentary at that moment"],
+        sample: "The boys said that they were watching a documentary then.",
+        rule: "Present Continuous -> Past Continuous; 'now' -> 'then'."
+      },
+      {
+        id: 3,
+        type: "Affirmative",
+        direct: '"I finished my science project yesterday," Daniel told me.',
+        prefix: "Daniel told me that",
+        answers: ["he had finished his science project the day before", "he had finished his science project the previous day"],
+        sample: "Daniel told me that he had finished his science project the day before.",
+        rule: "Past Simple -> Past Perfect ('had finished'); 'yesterday' -> 'the day before'."
+      },
+      {
+        id: 4,
+        type: "Affirmative",
+        direct: '"She has visited London twice," Mark explained.',
+        prefix: "Mark explained that",
+        answers: ["she had visited london twice"],
+        sample: "Mark explained that she had visited London twice.",
+        rule: "Present Perfect ('has visited') -> Past Perfect ('had visited')."
+      },
+      {
+        id: 5,
+        type: "Affirmative",
+        direct: '"I will call you tomorrow," Emma promised me.',
+        prefix: "Emma promised me that",
+        answers: ["she would call me the next day", "she would call me the following day"],
+        sample: "Emma promised me that she would call me the next day.",
+        rule: "'will' -> 'would'; 'tomorrow' -> 'the next day'."
+      },
+      {
+        id: 6,
+        type: "Affirmative",
+        direct: '"I can solve this math problem," Lucas said.',
+        prefix: "Lucas said that",
+        answers: ["he could solve that math problem"],
+        sample: "Lucas said that he could solve that math problem.",
+        rule: "'can' -> 'could'; 'this' -> 'that'."
+      },
+      {
+        id: 7,
+        type: "Affirmative",
+        direct: '"You must wear a helmet here," the coach reminded us.',
+        prefix: "The coach reminded us that",
+        answers: ["we had to wear a helmet there"],
+        sample: "The coach reminded us that we had to wear a helmet there.",
+        rule: "'must' -> 'had to'; 'here' -> 'there'."
+      },
+      {
+        id: 8,
+        type: "Negative",
+        direct: '"I do not like spicy food," Clara said.',
+        prefix: "Clara said that",
+        answers: ["she did not like spicy food", "she didn't like spicy food"],
+        sample: "Clara said that she didn't like spicy food.",
+        rule: "Negative Present Simple ('do not like') -> Negative Past Simple ('didn't like')."
+      },
+      {
+        id: 9,
+        type: "Negative",
+        direct: '"We are not going to the party tonight," they told us.',
+        prefix: "They told us that",
+        answers: ["they were not going to the party that night", "they weren't going to the party that night"],
+        sample: "They told us that they weren't going to the party that night.",
+        rule: "'are not going' -> 'weren't going'; 'tonight' -> 'that night'."
+      },
+      {
+        id: 10,
+        type: "Negative",
+        direct: '"I have never seen that movie," David admitted.',
+        prefix: "David admitted that",
+        answers: ["he had never seen that movie"],
+        sample: "David admitted that he had never seen that movie.",
+        rule: "Present Perfect ('have never seen') -> Past Perfect ('had never seen')."
+      },
+      {
+        id: 11,
+        type: "Negative",
+        direct: '"She will not forget your birthday," he assured me.',
+        prefix: "He assured me that",
+        answers: ["she would not forget my birthday", "she wouldn't forget my birthday"],
+        sample: "He assured me that she wouldn't forget my birthday.",
+        rule: "'will not' -> 'wouldn't'; 'your' -> 'my'."
+      },
+      {
+        id: 12,
+        type: "Negative",
+        direct: '"I didn\'t break the vase," the boy insisted.',
+        prefix: "The boy insisted that",
+        answers: ["he had not broken the vase", "he hadn't broken the vase"],
+        sample: "The boy insisted that he hadn't broken the vase.",
+        rule: "Negative Past Simple ('didn't break') -> Negative Past Perfect ('hadn't broken')."
+      },
+      {
+        id: 13,
+        type: "Interrogative (Yes/No)",
+        direct: '"Do you speak French?" the receptionist asked me.',
+        prefix: "The receptionist asked me",
+        answers: ["if i spoke french", "whether i spoke french"],
+        sample: "The receptionist asked me if I spoke French.",
+        rule: "Yes/No question uses 'if/whether' + statement order + Past Simple ('spoke')."
+      },
+      {
+        id: 14,
+        type: "Interrogative (Yes/No)",
+        direct: '"Are they coming to the meeting today?" Mr. Rocha asked.',
+        prefix: "Mr. Rocha asked",
+        answers: ["if they were coming to the meeting that day", "whether they were coming to the meeting that day"],
+        sample: "Mr. Rocha asked whether they were coming to the meeting that day.",
+        rule: "'Are they coming' -> 'if/whether they were coming'; 'today' -> 'that day'."
+      },
+      {
+        id: 15,
+        type: "Interrogative (Wh-)",
+        direct: '"Where did you buy these shoes?" Anna asked me.',
+        prefix: "Anna asked me",
+        answers: ["where i had bought those shoes"],
+        sample: "Anna asked me where I had bought those shoes.",
+        rule: "Wh- question keeps 'where', drops 'did', shifts to Past Perfect ('had bought'), 'these' -> 'those'."
+      },
+      {
+        id: 16,
+        type: "Interrogative (Wh-)",
+        direct: '"Why is the train late?" the passenger asked.',
+        prefix: "The passenger asked",
+        answers: ["why the train was late"],
+        sample: "The passenger asked why the train was late.",
+        rule: "Subject ('the train') comes before verb ('was') in reported questions."
+      },
+      {
+        id: 17,
+        type: "Command",
+        direct: '"Close the window," the teacher told Carlos.',
+        prefix: "The teacher told Carlos",
+        answers: ["to close the window"],
+        sample: "The teacher told Carlos to close the window.",
+        rule: "Affirmative commands use 'told + object + to + base verb'."
+      },
+      {
+        id: 18,
+        type: "Negative Command",
+        direct: '"Don\'t touch the wet paint!" the guard warned us.',
+        prefix: "The guard warned us",
+        answers: ["not to touch the wet paint"],
+        sample: "The guard warned us not to touch the wet paint.",
+        rule: "Negative commands use 'warned + object + not to + base verb'."
+      },
+      {
+        id: 19,
+        type: "Advice / Request",
+        direct: '"You should drink more water," the nurse advised her.',
+        prefix: "The nurse advised her",
+        answers: ["to drink more water"],
+        sample: "The nurse advised her to drink more water.",
+        rule: "'advise + object + to + base verb'."
+      },
+      {
+        id: 20,
+        type: "Suggestion",
+        direct: '"Let\'s review the grammar notes together," Maya suggested.',
+        prefix: "Maya suggested",
+        answers: ["reviewing the grammar notes together"],
+        sample: "Maya suggested reviewing the grammar notes together.",
+        rule: "'suggest' is followed directly by a gerund (-ing form)."
+      }
+    ];
+
+    // Activity 4: 8 Audio Dictation Sentences (Exact Answer Key from User Prompt)
+    const ACT4_ITEMS = [
+      { id: 1, audio: "Audio1.mp3", answer: "Maria said that she was studying for the exam." },
+      { id: 2, audio: "Audio2.mp3", answer: "Tom told me that they would visit the museum the next day." },
+      { id: 3, audio: "Audio3.mp3", answer: "She asked me where I lived." },
+      { id: 4, audio: "Audio4.mp3", answer: "Carlos suggested watching a movie that night." },
+      { id: 5, audio: "Audio5.mp3", answer: "The doctor advised him to drink more water." },
+      { id: 6, audio: "Audio6.mp3", answer: "The teacher warned the students not to touch the wire." },
+      { id: 7, audio: "Audio7.mp3", answer: "Ana promised to call me after class." },
+      { id: 8, audio: "Audio8.mp3", answer: "Luis denied breaking the window." }
+    ];
+
+    // Activity 6: "The Real Sherlock Holmes" 6 Multiple-Choice Questions & Answer Key
+    const ACT6_ITEMS = [
+      {
+        id: 1,
+        question: "1. Which statement best expresses the main idea of the text?",
+        options: {
+          A: "Doyle disliked medicine and invented Holmes to escape it.",
+          B: "Holmes’s observational method was inspired by a real surgeon, Dr Joseph Bell.",
+          C: "Bell secretly helped the Edinburgh police solve crimes.",
+          D: "Modern doctors are better detectives than fictional ones."
+        },
+        correct: "B",
+        explanation: "B. The text explains how Bell’s habits of observation inspired Holmes."
+      },
+      {
+        id: 2,
+        question: "2. In the first paragraph, which reporting verb shows that Bell cautioned his students about a danger?",
+        options: {
+          A: "suggested",
+          B: "admitted",
+          C: "recalled",
+          D: "warned"
+        },
+        correct: "D",
+        explanation: "D. Bell warned students that a careless glance could hide an important clue."
+      },
+      {
+        id: 3,
+        question: "3. According to the account, why did Bell conclude that the patient had a military background?",
+        options: {
+          A: "The patient had a Highland accent.",
+          B: "The patient carried a regimental badge.",
+          C: "The patient had kept his hat on, a habit of military life.",
+          D: "The patient had a skin complaint common among soldiers."
+        },
+        correct: "C",
+        explanation: "C. Bell explained that the man had kept his hat on, a habit of military life."
+      },
+      {
+        id: 4,
+        question: "4. What does the author suggest by saying that some details “were improved over the years”?",
+        options: {
+          A: "Retellings may have exaggerated or embellished the story.",
+          B: "Doctors corrected Bell’s medical mistakes.",
+          C: "Bell revised his method after meeting Doyle.",
+          D: "Doyle published corrections to his stories."
+        },
+        correct: "A",
+        explanation: "A. The author suggests that stories were embellished as they were retold."
+      },
+      {
+        id: 5,
+        question: "5. Which phrase best describes Bell’s attitude toward the credit for Holmes?",
+        options: {
+          A: "proud and demanding",
+          B: "angry and resentful",
+          C: "modest and generous",
+          D: "indifferent and silent"
+        },
+        correct: "C",
+        explanation: "C. Bell denied deserving the credit and claimed that Doyle created Holmes himself."
+      },
+      {
+        id: 6,
+        question: "6. Which conclusion is best supported by the final paragraph?",
+        options: {
+          A: "Fictional detectives are always more accurate than real ones.",
+          B: "Confidence matters more than observation.",
+          C: "Scholars agree that Holmes copied Bell exactly.",
+          D: "Reliable conclusions require careful observation and evidence."
+        },
+        correct: "D",
+        explanation: "D. The last paragraph says strong conclusions begin with careful observation and depend on evidence."
+      }
+    ];
+
+    // Activity 7: 10 Reported Speech Sentences with 10 Different Reporting Verbs
+    const ACT7_ITEMS = [
+      { id: 1, verb: "explained", sentence: "The scientist explained that the experiment had succeeded." },
+      { id: 2, verb: "warned", sentence: "The guide warned the hikers not to leave the trail." },
+      { id: 3, verb: "suggested", sentence: "Elena suggested taking the early train to Madrid." },
+      { id: 4, verb: "promised", sentence: "Marcus promised to return the library books on Monday." },
+      { id: 5, verb: "denied", sentence: "The suspect denied stealing the painting from the gallery." },
+      { id: 6, verb: "advised", sentence: "My mentor advised me to practice speaking every day." },
+      { id: 7, verb: "reminded", sentence: "Mom reminded us to lock the front door before leaving." },
+      { id: 8, verb: "admitted", sentence: "The player admitted that he had made a careless mistake." },
+      { id: 9, verb: "asked", sentence: "The journalist asked the mayor when construction would begin." },
+      { id: 10, verb: "insisted", sentence: "Dr. Bell insisted that careful observation required daily practice." }
+    ];
+
+    /* =========================================================================
+       APPLICATION STATE
+    ========================================================================= */
+    const state = {
+      currentSection: 0,
+      lastActiveSection: 0,
+      studentName: "",
+      studentDate: "",
+      activities: {
+        1: { checked: false, score: 0, max: 10, label: "Activity 1: Video Reflection", skill: "Listening & Writing" },
+        2: { checked: false, score: 0, max: 10, label: "Activity 2: Story Summary", skill: "Reading & Writing" },
+        3: { checked: false, score: 0, max: 20, label: "Activity 3: Grammar Drill (20)", skill: "Grammar Transformation" },
+        4: { checked: false, score: 0, max: 8, label: "Activity 4: Audio Dictation (8)", skill: "Listening Accuracy" },
+        5: { checked: false, score: 0, max: 24, label: "Activity 5: 24-Square Puzzle", skill: "Visual Observation" },
+        6: { checked: false, score: 0, max: 6, label: "Activity 6: Sherlock Reading (6)", skill: "Reading Comprehension" },
+        7: { checked: false, score: 0, max: 10, label: "Activity 7: Sentence Scramble (10)", skill: "Sentence Construction" }
+      },
+      // Puzzle state
+      puzzleMasterUrl: "Image3.jpg", // Direct local file path (Image3.jpg / .png / .jpeg / .webp / Image3)
+      puzzleSlots: new Array(24).fill(null), // slotIndex -> pieceIndex (0..23) or null
+      puzzleTray: [], // array of pieceIndex (0..23)
+      selectedPuzzlePiece: null, // { source: 'tray'|'slot', index: number, pieceId: number }
+      puzzleSeconds: 0,
+      puzzleTimerInterval: null,
+      // Activity 7 state
+      scrambleState: {} // itemId -> { bank: [{uid, word}], answer: [{uid, word}] }
+    };
+
+    /* =========================================================================
+       UTILITY FUNCTIONS
+    ========================================================================= */
+    function showToast(msg, icon = "ℹ️") {
+      const banner = document.getElementById("toastBanner");
+      document.getElementById("toastMessage").textContent = msg;
+      document.getElementById("toastIcon").textContent = icon;
+      banner.classList.remove("hidden");
+      clearTimeout(banner._timer);
+      banner._timer = setTimeout(() => {
+        banner.classList.add("hidden");
+      }, 3600);
+    }
+
+    function toggleTheme() {
+      const htmlEl = document.documentElement;
+      const isDark = htmlEl.classList.toggle("dark");
+      htmlEl.classList.toggle("light", !isDark);
+      document.getElementById("themeIcon").textContent = isDark ? "☀️" : "🌙";
+      document.getElementById("themeLabel").textContent = isDark ? "Light Mode" : "Dark Mode";
+    }
+
+    function updateStudentMeta() {
+      const nameVal = document.getElementById("studentNameInput").value.trim();
+      const dateVal = document.getElementById("studentDateInput").value;
+      state.studentName = nameVal;
+      state.studentDate = dateVal;
+      document.getElementById("headerStudentName").textContent = nameVal || "Guest Student";
+    }
+
+    function normalizeText(str) {
+      return (str || "")
+        .toLowerCase()
+        .replace(/[“”"']/g, "'")
+        .replace(/don't/g, "do not")
+        .replace(/didn't/g, "did not")
+        .replace(/wasn't/g, "was not")
+        .replace(/weren't/g, "were not")
+        .replace(/wouldn't/g, "would not")
+        .replace(/couldn't/g, "could not")
+        .replace(/hadn't/g, "had not")
+        .replace(/[.,!?;:]+$/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function updateProgressBar() {
+      const checkedCount = Object.values(state.activities).filter((a) => a.checked).length;
+      const pct = Math.round((checkedCount / 7) * 100);
+      document.getElementById("progressStatusText").textContent = `Worksheet Progress: ${checkedCount} of 7 Activities Checked`;
+      document.getElementById("progressPercentText").textContent = `${pct}%`;
+      document.getElementById("overallProgressBar").style.width = `${pct}%`;
+    }
+
+    function markActivityBadgeChecked(actNum, score, max) {
+      const badge = document.getElementById(`status-badge-${actNum}`);
+      const pct = Math.round((score / max) * 100);
+      badge.textContent = `Checked & Locked • ${score}/${max} (${pct}%)`;
+      badge.className =
+        pct >= 70
+          ? "text-xs font-bold px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200"
+          : "text-xs font-bold px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-200";
+
+      const pill = document.getElementById(`nav-pill-${actNum}`);
+      if (pill && !pill.textContent.includes("✓")) {
+        pill.textContent = `${pill.textContent} ✓`;
+      }
+      updateProgressBar();
+    }
+
+    /* =========================================================================
+       SECTION NAVIGATION (Always scrolls smoothly to the top of the page)
+    ========================================================================= */
+    function goToSection(index) {
+      if (index !== 8) {
+        state.lastActiveSection = index;
+      }
+      state.currentSection = index;
+
+      // Hide all sections
+      document.querySelectorAll(".section-panel").forEach((sec) => sec.classList.add("hidden"));
+
+      // Show requested section
+      const targetId = index === 8 ? "section-results" : `section-${index}`;
+      const targetEl = document.getElementById(targetId);
+      if (targetEl) {
+        targetEl.classList.remove("hidden");
+      }
+
+      // Update active pill styling
+      document.querySelectorAll(".nav-pill").forEach((pill, i) => {
+        if (i === index) {
+          pill.className =
+            "nav-pill px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition bg-sky-600 text-white shadow-sm";
+        } else if (i === 8) {
+          pill.className =
+            "nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-200";
+        } else {
+          pill.className =
+            "nav-pill px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-sky-100 dark:hover:bg-slate-700";
+        }
+      });
+
+      // Start puzzle timer if entering Activity 5
+      if (index === 5 && !state.activities[5].checked && !state.puzzleTimerInterval) {
+        startPuzzleTimer();
+      }
+
+      // Scroll straight to the top of the page
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    /* =========================================================================
+       MEDIA FALLBACK HANDLERS (Ensures clean visuals even before files exist)
+    ========================================================================= */
+    function handleImageFallback(imgEl, filename, titleText) {
+      if (imgEl.dataset.fallbackApplied) return;
+      imgEl.dataset.fallbackApplied = "true";
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="960" height="420" viewBox="0 0 960 420">
+          <defs>
+            <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#0284c7"/>
+              <stop offset="50%" stop-color="#2563eb"/>
+              <stop offset="100%" stop-color="#4f46e5"/>
+            </linearGradient>
+          </defs>
+          <rect width="960" height="420" rx="20" fill="url(#bg)"/>
+          <circle cx="140" cy="90" r="110" fill="rgba(255,255,255,0.08)"/>
+          <circle cx="840" cy="340" r="130" fill="rgba(255,255,255,0.08)"/>
+          <text x="480" y="175" text-anchor="middle" fill="#ffffff" font-family="Inter, sans-serif" font-size="30" font-weight="800">${titleText}</text>
+          <text x="480" y="225" text-anchor="middle" fill="#bae6fd" font-family="Inter, sans-serif" font-size="18" font-weight="600">Media File Linked: ${filename} (Place in same folder as HTML)</text>
+          <rect x="330" y="255" width="300" height="44" rx="22" fill="rgba(255,255,255,0.18)"/>
+          <text x="480" y="283" text-anchor="middle" fill="#ffffff" font-family="Inter, sans-serif" font-size="15" font-weight="700">Mr. Rocha’s English Class</text>
+        </svg>`;
+      imgEl.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+    }
+
+    function handleVideoFallback(videoEl) {
+      videoEl.classList.add("hidden");
+      document.getElementById("video1Fallback").classList.remove("hidden");
+    }
+
+    function handleAudioFallback(audioEl, filename) {
+      const msg = audioEl.parentElement.querySelector(".audio-fallback-msg");
+      if (msg) msg.classList.remove("hidden");
+    }
+
+    /* =========================================================================
+       ACTIVITY 1 & 2 CHECKING & LOCKING
+    ========================================================================= */
+    function checkActivity1() {
+      if (state.activities[1].checked) return;
+      const textarea = document.getElementById("act1Response");
+      const text = textarea.value.trim();
+
+      if (text.length < 15) {
+        showToast("Please write at least a couple of sentences about the video before checking.", "✍️");
+        textarea.focus();
+        return;
+      }
+
+      const words = text.split(/\s+/).filter(Boolean).length;
+      const score = words >= 18 ? 10 : words >= 10 ? 8 : 6;
+
+      state.activities[1].checked = true;
+      state.activities[1].score = score;
+
+      textarea.disabled = true;
+      textarea.classList.add("locked-correct");
+      document.getElementById("checkBtn-1").disabled = true;
+      document.getElementById("checkBtn-1").classList.add("opacity-50", "cursor-not-allowed");
+
+      const fb = document.getElementById("feedback-1");
+      fb.classList.remove("hidden");
+      fb.className = "mt-4 p-4 rounded-2xl border border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-900 dark:text-emerald-200 text-sm font-medium";
+      fb.innerHTML = `✅ <strong>Response Recorded & Locked (${score}/10 pts):</strong> Great job sharing your summary (${words} words) for Mr. Rocha! Your answer is now locked.`;
+
+      markActivityBadgeChecked(1, score, 10);
+    }
+
+    function checkActivity2() {
+      if (state.activities[2].checked) return;
+      const textarea = document.getElementById("act2Response");
+      const text = textarea.value.trim();
+
+      if (text.length < 15) {
+        showToast("Please write what the story is about before checking your answer.", "📖");
+        textarea.focus();
+        return;
+      }
+
+      const words = text.split(/\s+/).filter(Boolean).length;
+      const score = words >= 18 ? 10 : words >= 10 ? 8 : 6;
+
+      state.activities[2].checked = true;
+      state.activities[2].score = score;
+
+      textarea.disabled = true;
+      textarea.classList.add("locked-correct");
+      document.getElementById("checkBtn-2").disabled = true;
+      document.getElementById("checkBtn-2").classList.add("opacity-50", "cursor-not-allowed");
+
+      const fb = document.getElementById("feedback-2");
+      fb.classList.remove("hidden");
+      fb.className = "mt-4 p-4 rounded-2xl border border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-900 dark:text-emerald-200 text-sm font-medium";
+      fb.innerHTML = `✅ <strong>Story Summary Recorded & Locked (${score}/10 pts):</strong> Thank you for explaining the story (${words} words) to Mr. Rocha! Your response is now locked.`;
+
+      markActivityBadgeChecked(2, score, 10);
+    }
+
+    /* =========================================================================
+       ACTIVITY 3: RENDER & CHECK 20 GRAMMAR SENTENCES
+    ========================================================================= */
+    function renderActivity3() {
+      const container = document.getElementById("act3QuestionsContainer");
+      container.innerHTML = ACT3_ITEMS.map((item) => `
+        <div id="act3-card-${item.id}" class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 transition">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+            <span class="text-xs font-extrabold text-sky-700 dark:text-sky-400">Sentence #${item.id}</span>
+            <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200">${item.type}</span>
+          </div>
+          <p class="text-sm sm:text-base font-semibold text-slate-900 dark:text-white mb-2.5">
+            Direct: <span class="text-indigo-700 dark:text-indigo-300">${item.direct}</span>
+          </p>
+          <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+            <label for="act3-input-${item.id}" class="text-sm font-bold text-slate-700 dark:text-slate-200 shrink-0">
+              ${item.prefix}
+            </label>
+            <input
+              type="text"
+              id="act3-input-${item.id}"
+              placeholder="complete the reported speech..."
+              class="shiny-blue-box flex-1 px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm font-medium"
+            />
+          </div>
+          <div id="act3-hint-${item.id}" class="hidden mt-2 text-xs font-semibold"></div>
+        </div>
+      `).join("");
+    }
+
+    function checkActivity3() {
+      if (state.activities[3].checked) return;
+
+      let score = 0;
+      ACT3_ITEMS.forEach((item) => {
+        const input = document.getElementById(`act3-input-${item.id}`);
+        const hint = document.getElementById(`act3-hint-${item.id}`);
+        const rawUser = input.value.trim();
+        const normUser = normalizeText(rawUser);
+        const normPrefix = normalizeText(item.prefix);
+
+        // Allow student to enter either just the completion OR the full sentence including the prefix
+        let candidate = normUser;
+        if (candidate.startsWith(normPrefix + " ")) {
+          candidate = candidate.slice(normPrefix.length).trim();
+        }
+        // Also allow optional "that" if prefix doesn't end with "that"
+        const candidateNoThat = candidate.replace(/^that\s+/, "");
+
+        const isCorrect = item.answers.some((ans) => {
+          const normAns = normalizeText(ans);
+          return candidate === normAns || candidateNoThat === normAns;
+        });
+
+        input.disabled = true;
+        hint.classList.remove("hidden");
+
+        if (isCorrect) {
+          score++;
+          input.classList.add("locked-correct");
+          hint.className = "mt-2 text-xs font-bold text-emerald-700 dark:text-emerald-400";
+          hint.innerHTML = `✅ Correct! (${item.rule})`;
+        } else {
+          input.classList.add("locked-incorrect");
+          hint.className = "mt-2 text-xs font-bold text-rose-700 dark:text-rose-400";
+          hint.innerHTML = `❌ Answer: <span class="underline">${item.sample}</span> — <em>${item.rule}</em>`;
+        }
+      });
+
+      state.activities[3].checked = true;
+      state.activities[3].score = score;
+      document.getElementById("checkBtn-3").disabled = true;
+      document.getElementById("checkBtn-3").classList.add("opacity-50", "cursor-not-allowed");
+
+      const fb = document.getElementById("feedback-3");
+      fb.classList.remove("hidden");
+      fb.className = "mt-4 p-4 rounded-2xl border border-sky-300 dark:border-sky-700 bg-sky-50 dark:bg-sky-950/50 text-sky-900 dark:text-sky-200 text-sm font-semibold";
+      fb.innerHTML = `📊 <strong>Activity 3 Results:</strong> You scored <strong>${score} out of 20</strong> (${Math.round((score / 20) * 100)}%). All answers are now locked for review.`;
+
+      markActivityBadgeChecked(3, score, 20);
+    }
+
+    /* =========================================================================
+       ACTIVITY 4: RENDER & CHECK 8 AUDIO DICTATION ITEMS
+    ========================================================================= */
+    function renderActivity4() {
+      const container = document.getElementById("act4Container");
+      container.innerHTML = ACT4_ITEMS.map((item) => `
+        <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+            <span class="text-sm font-extrabold text-teal-700 dark:text-teal-400 flex items-center gap-2">
+              <span>🎧</span> Audio ${item.id} (${item.audio})
+            </span>
+          </div>
+          <audio
+            src="${item.audio}"
+            controls
+            class="w-full mb-3"
+            onerror="handleAudioFallback(this, '${item.audio}')"
+          >
+            Your browser does not support audio playback.
+          </audio>
+          <p class="audio-fallback-msg hidden text-xs text-amber-600 dark:text-amber-400 mb-2">
+            Place <code>${item.audio}</code> in the same folder as this HTML file.
+          </p>
+          <div class="flex items-center gap-2.5">
+            <span class="font-extrabold text-slate-700 dark:text-slate-200 text-base">${item.id}.</span>
+            <input
+              type="text"
+              id="act4-input-${item.id}"
+              placeholder="Type the exact sentence you hear..."
+              class="shiny-blue-box w-full px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-sm sm:text-base font-medium"
+            />
+          </div>
+          <div id="act4-hint-${item.id}" class="hidden mt-2 text-xs font-bold"></div>
+        </div>
+      `).join("");
+    }
+
+    function checkActivity4() {
+      if (state.activities[4].checked) return;
+
+      let score = 0;
+      ACT4_ITEMS.forEach((item) => {
+        const input = document.getElementById(`act4-input-${item.id}`);
+        const hint = document.getElementById(`act4-hint-${item.id}`);
+        const userNorm = normalizeText(input.value);
+        const keyNorm = normalizeText(item.answer);
+
+        const isCorrect = userNorm === keyNorm;
+        input.disabled = true;
+        hint.classList.remove("hidden");
+
+        if (isCorrect) {
+          score++;
+          input.classList.add("locked-correct");
+          hint.className = "mt-2 text-xs font-bold text-emerald-700 dark:text-emerald-400";
+          hint.innerHTML = `✅ Exact match!`;
+        } else {
+          input.classList.add("locked-incorrect");
+          hint.className = "mt-2 text-xs font-bold text-rose-700 dark:text-rose-400";
+          hint.innerHTML = `❌ Correct Sentence: <span class="underline">${item.answer}</span>`;
+        }
+      });
+
+      state.activities[4].checked = true;
+      state.activities[4].score = score;
+      document.getElementById("checkBtn-4").disabled = true;
+      document.getElementById("checkBtn-4").classList.add("opacity-50", "cursor-not-allowed");
+
+      const fb = document.getElementById("feedback-4");
+      fb.classList.remove("hidden");
+      fb.className = "mt-4 p-4 rounded-2xl border border-teal-300 dark:border-teal-700 bg-teal-50 dark:bg-teal-950/50 text-teal-900 dark:text-teal-200 text-sm font-semibold";
+      fb.innerHTML = `🎧 <strong>Activity 4 Results:</strong> You transcribed <strong>${score} out of 8</strong> sentences accurately (${Math.round((score / 8) * 100)}%).`;
+
+      markActivityBadgeChecked(4, score, 8);
+    }
+
+    /* =========================================================================
+       ACTIVITY 5: 24-SQUARE IMAGE3 PUZZLE (Pure CSS Slicing of Local Image3)
+    ========================================================================= */
+    function initPuzzle() {
+      const previewEl = document.getElementById("targetImage3Preview");
+      const candidates = ["Image3.jpg", "Image3.png", "Image3.jpeg", "Image3.webp", "Image3"];
+
+      // Default immediately to local Image3.jpg in the same folder and render the 24 shuffled squares
+      state.puzzleMasterUrl = candidates[0];
+      if (previewEl) {
+        previewEl.src = state.puzzleMasterUrl;
+      }
+      resetPuzzle(false);
+
+      // Probe alternative Image3 extensions in the same folder if Image3.jpg is named differently
+      let idx = 0;
+      function tryResolveLocalImage3() {
+        if (idx >= candidates.length) return;
+        const candidateSrc = candidates[idx++];
+        const probeImg = new Image();
+        probeImg.onload = () => {
+          if (probeImg.naturalWidth > 0 && probeImg.naturalHeight > 0) {
+            state.puzzleMasterUrl = candidateSrc;
+            if (previewEl) {
+              previewEl.src = candidateSrc;
+            }
+            renderPuzzleUI();
+          }
+        };
+        probeImg.onerror = () => {
+          tryResolveLocalImage3();
+        };
+        probeImg.src = candidateSrc;
+      }
+
+      tryResolveLocalImage3();
+    }
+
+    function getPuzzleTileVisualStyle(pieceId) {
+      const col = pieceId % 6;
+      const row = Math.floor(pieceId / 6);
+      const posX = (col / 5) * 100;
+      const posY = (row / 3) * 100;
+      return `background-image: url('${state.puzzleMasterUrl}'); background-size: 600% 400%; background-position: ${posX}% ${posY}%; background-repeat: no-repeat;`;
+    }
+
+    function startPuzzleTimer() {
+      clearInterval(state.puzzleTimerInterval);
+      state.puzzleTimerInterval = setInterval(() => {
+        if (state.activities[5].checked) {
+          clearInterval(state.puzzleTimerInterval);
+          return;
+        }
+        state.puzzleSeconds++;
+        const mins = String(Math.floor(state.puzzleSeconds / 60)).padStart(2, "0");
+        const secs = String(state.puzzleSeconds % 60).padStart(2, "0");
+        document.getElementById("puzzleTimerDisplay").textContent = `${mins}:${secs}`;
+      }, 1000);
+    }
+
+    function resetPuzzle(restartTimer = true) {
+      if (state.activities[5].checked) return;
+
+      state.puzzleSlots = new Array(24).fill(null);
+      state.selectedPuzzlePiece = null;
+
+      // Create shuffled array [0..23]
+      const indices = Array.from({ length: 24 }, (_, i) => i);
+      for (let i = indices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [indices[i], indices[j]] = [indices[j], indices[i]];
+      }
+      state.puzzleTray = indices;
+
+      state.puzzleSeconds = 0;
+      document.getElementById("puzzleTimerDisplay").textContent = "00:00";
+      if (restartTimer) {
+        startPuzzleTimer();
+      }
+      renderPuzzleUI();
+    }
+
+    function renderPuzzleUI() {
+      const boardEl = document.getElementById("puzzleTargetBoard");
+      const trayEl = document.getElementById("puzzlePiecesTray");
+      if (!boardEl || !trayEl) return;
+      const locked = state.activities[5].checked;
+
+      // Render 24 Target Slots
+      boardEl.innerHTML = state.puzzleSlots
+        .map((pieceId, slotIdx) => {
+          const isSelected =
+            state.selectedPuzzlePiece &&
+            state.selectedPuzzlePiece.source === "slot" &&
+            state.selectedPuzzlePiece.index === slotIdx;
+
+          let statusRing = "";
+          if (locked && pieceId !== null) {
+            statusRing = pieceId === slotIdx ? "ring-2 ring-emerald-500" : "ring-2 ring-rose-500";
+          } else if (isSelected) {
+            statusRing = "ring-4 ring-amber-400 scale-95";
+          }
+
+          if (pieceId !== null) {
+            const tileStyle = getPuzzleTileVisualStyle(pieceId);
+            return `
+              <div
+                draggable="${!locked}"
+                ondragstart="handleDragStartPuzzle(event, 'slot', ${slotIdx}, ${pieceId})"
+                ondragover="event.preventDefault()"
+                ondrop="handleDropToSlot(event, ${slotIdx})"
+                onclick="handleSlotClick(${slotIdx})"
+                style="${tileStyle}"
+                class="puzzle-slot puzzle-piece-card relative bg-sky-900 rounded overflow-hidden cursor-pointer ${statusRing}"
+                title="Placed Puzzle Square"
+              ></div>
+            `;
+          } else {
+            return `
+              <div
+                class="puzzle-slot flex items-center justify-center bg-slate-100/90 dark:bg-slate-800/90 border border-dashed border-slate-400 dark:border-slate-600 rounded text-[11px] font-bold text-slate-500 dark:text-slate-400 cursor-pointer hover:bg-sky-100/60 dark:hover:bg-slate-700"
+                ondragover="event.preventDefault()"
+                ondrop="handleDropToSlot(event, ${slotIdx})"
+                onclick="handleSlotClick(${slotIdx})"
+              ></div>
+            `;
+          }
+        })
+        .join("");
+
+      // Render Shuffled Tray Pieces
+      if (state.puzzleTray.length === 0) {
+        trayEl.innerHTML = `
+          <div class="col-span-full py-6 text-center text-xs sm:text-sm font-bold text-emerald-700 dark:text-emerald-400">
+            🎉 All 24 squares have been placed onto the board! Click "Check Answers" when ready.
+          </div>
+        `;
+      } else {
+        trayEl.innerHTML = state.puzzleTray
+          .map((pieceId, trayIdx) => {
+            const isSelected =
+              state.selectedPuzzlePiece &&
+              state.selectedPuzzlePiece.source === "tray" &&
+              state.selectedPuzzlePiece.index === trayIdx;
+            const tileStyle = getPuzzleTileVisualStyle(pieceId);
+
+            return `
+              <div
+                draggable="${!locked}"
+                ondragstart="handleDragStartPuzzle(event, 'tray', ${trayIdx}, ${pieceId})"
+                onclick="handleTrayPieceClick(${trayIdx}, ${pieceId})"
+                style="${tileStyle}"
+                class="puzzle-piece-card relative w-full rounded-lg overflow-hidden border-2 bg-sky-900 ${
+                  isSelected ? "border-amber-400 ring-2 ring-amber-400 scale-95" : "border-white dark:border-slate-600"
+                } shadow-md cursor-grab hover:scale-105 transition select-none"
+                title="Drag or tap puzzle square"
+              ></div>
+            `;
+          })
+          .join("");
+      }
+
+      const placedCount = state.puzzleSlots.filter((p) => p !== null).length;
+      document.getElementById("puzzlePlacedCount").textContent = `Placed: ${placedCount} / 24`;
+    }
+
+    function handleDragStartPuzzle(ev, source, index, pieceId) {
+      if (state.activities[5].checked) return;
+      ev.dataTransfer.setData("text/plain", JSON.stringify({ source, index, pieceId }));
+    }
+
+    function handleDropToSlot(ev, targetSlotIdx) {
+      ev.preventDefault();
+      if (state.activities[5].checked) return;
+      const raw = ev.dataTransfer.getData("text/plain");
+      if (!raw) return;
+      const dragged = JSON.parse(raw);
+      placeOrSwapPuzzlePiece(dragged, targetSlotIdx);
+    }
+
+    function handleDropToTray(ev) {
+      ev.preventDefault();
+      if (state.activities[5].checked) return;
+      const raw = ev.dataTransfer.getData("text/plain");
+      if (!raw) return;
+      const dragged = JSON.parse(raw);
+      if (dragged.source === "slot") {
+        state.puzzleSlots[dragged.index] = null;
+        state.puzzleTray.push(dragged.pieceId);
+        state.selectedPuzzlePiece = null;
+        renderPuzzleUI();
+      }
+    }
+
+    function handleTrayPieceClick(trayIdx, pieceId) {
+      if (state.activities[5].checked) return;
+      if (
+        state.selectedPuzzlePiece &&
+        state.selectedPuzzlePiece.source === "tray" &&
+        state.selectedPuzzlePiece.index === trayIdx
+      ) {
+        state.selectedPuzzlePiece = null;
+      } else {
+        state.selectedPuzzlePiece = { source: "tray", index: trayIdx, pieceId };
+      }
+      renderPuzzleUI();
+    }
+
+    function handleSlotClick(targetSlotIdx) {
+      if (state.activities[5].checked) return;
+      const existingPiece = state.puzzleSlots[targetSlotIdx];
+
+      if (state.selectedPuzzlePiece) {
+        placeOrSwapPuzzlePiece(state.selectedPuzzlePiece, targetSlotIdx);
+      } else if (existingPiece !== null) {
+        state.selectedPuzzlePiece = { source: "slot", index: targetSlotIdx, pieceId: existingPiece };
+        renderPuzzleUI();
+      }
+    }
+
+    function placeOrSwapPuzzlePiece(dragged, targetSlotIdx) {
+      const targetExisting = state.puzzleSlots[targetSlotIdx];
+
+      if (dragged.source === "tray") {
+        // Remove from tray
+        state.puzzleTray.splice(dragged.index, 1);
+        // If target slot already had a piece, return it to tray
+        if (targetExisting !== null) {
+          state.puzzleTray.push(targetExisting);
+        }
+        state.puzzleSlots[targetSlotIdx] = dragged.pieceId;
+      } else if (dragged.source === "slot") {
+        if (dragged.index !== targetSlotIdx) {
+          state.puzzleSlots[targetSlotIdx] = dragged.pieceId;
+          state.puzzleSlots[dragged.index] = targetExisting;
+        }
+      }
+
+      state.selectedPuzzlePiece = null;
+      renderPuzzleUI();
+    }
+
+    function checkActivity5() {
+      if (state.activities[5].checked) return;
+
+      let correctSquares = 0;
+      for (let i = 0; i < 24; i++) {
+        if (state.puzzleSlots[i] === i) {
+          correctSquares++;
+        }
+      }
+
+      state.activities[5].checked = true;
+      state.activities[5].score = correctSquares;
+      clearInterval(state.puzzleTimerInterval);
+
+      document.getElementById("checkBtn-5").disabled = true;
+      document.getElementById("checkBtn-5").classList.add("opacity-50", "cursor-not-allowed");
+      document.getElementById("puzzleDoAgainBtn").disabled = true;
+      document.getElementById("puzzleDoAgainBtn").classList.add("opacity-50", "cursor-not-allowed");
+
+      renderPuzzleUI();
+
+      const timeStr = document.getElementById("puzzleTimerDisplay").textContent;
+      const fb = document.getElementById("feedback-5");
+      fb.classList.remove("hidden");
+      fb.className = "mt-4 p-4 rounded-2xl border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/50 text-amber-900 dark:text-amber-200 text-sm font-semibold";
+      fb.innerHTML = `🧩 <strong>Puzzle Checked & Locked:</strong> You placed <strong>${correctSquares} out of 24 squares</strong> in their exact positions in <strong>${timeStr}</strong>! Green outlines show accurate squares; red outlines show misplaced squares.`;
+
+      markActivityBadgeChecked(5, correctSquares, 24);
+    }
+
+    /* =========================================================================
+       ACTIVITY 6: RENDER & CHECK "THE REAL SHERLOCK HOLMES" (6 MCQs)
+    ========================================================================= */
+    function renderActivity6() {
+      const container = document.getElementById("act6QuestionsContainer");
+      container.innerHTML = ACT6_ITEMS.map((q) => {
+        const optionsHtml = Object.entries(q.options)
+          .map(
+            ([letter, text]) => `
+            <label
+              id="act6-opt-${q.id}-${letter}"
+              class="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-sky-400 cursor-pointer transition"
+            >
+              <input
+                type="radio"
+                name="act6-q-${q.id}"
+                value="${letter}"
+                class="mt-1 w-4 h-4 text-sky-600 focus:ring-sky-500"
+              />
+              <span class="text-sm text-slate-800 dark:text-slate-200">
+                <strong class="text-sky-700 dark:text-sky-400 mr-1">${letter}.</strong> ${text}
+              </span>
+            </label>
+          `
+          )
+          .join("");
+
+        return `
+          <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <p class="font-bold text-slate-900 dark:text-white text-sm sm:text-base mb-3">${q.question}</p>
+            <div class="space-y-2.5">${optionsHtml}</div>
+            <div id="act6-exp-${q.id}" class="hidden mt-3 p-3 rounded-xl text-xs font-semibold"></div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function checkActivity6() {
+      if (state.activities[6].checked) return;
+
+      let score = 0;
+      ACT6_ITEMS.forEach((q) => {
+        const radios = document.querySelectorAll(`input[name="act6-q-${q.id}"]`);
+        let selectedVal = null;
+        radios.forEach((r) => {
+          if (r.checked) selectedVal = r.value;
+          r.disabled = true;
+        });
+
+        const expEl = document.getElementById(`act6-exp-${q.id}`);
+        expEl.classList.remove("hidden");
+
+        const correctLabel = document.getElementById(`act6-opt-${q.id}-${q.correct}`);
+        correctLabel.classList.add("locked-correct");
+
+        if (selectedVal === q.correct) {
+          score++;
+          expEl.className = "mt-3 p-3 rounded-xl bg-emerald-100/80 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-200 text-xs font-semibold";
+          expEl.innerHTML = `✅ Correct! ${q.explanation}`;
+        } else {
+          if (selectedVal) {
+            const wrongLabel = document.getElementById(`act6-opt-${q.id}-${selectedVal}`);
+            wrongLabel.classList.add("locked-incorrect");
+          }
+          expEl.className = "mt-3 p-3 rounded-xl bg-rose-100/80 dark:bg-rose-950/60 text-rose-900 dark:text-rose-200 text-xs font-semibold";
+          expEl.innerHTML = `❌ Incorrect. Answer Key: ${q.explanation}`;
+        }
+      });
+
+      state.activities[6].checked = true;
+      state.activities[6].score = score;
+      document.getElementById("checkBtn-6").disabled = true;
+      document.getElementById("checkBtn-6").classList.add("opacity-50", "cursor-not-allowed");
+
+      const fb = document.getElementById("feedback-6");
+      fb.classList.remove("hidden");
+      fb.className = "mt-4 p-4 rounded-2xl border border-rose-300 dark:border-rose-700 bg-rose-50 dark:bg-rose-950/50 text-rose-900 dark:text-rose-200 text-sm font-semibold";
+      fb.innerHTML = `🕵️ <strong>Activity 6 Results:</strong> You answered <strong>${score} out of 6</strong> comprehension questions correctly (${Math.round((score / 6) * 100)}%).`;
+
+      markActivityBadgeChecked(6, score, 6);
+    }
+
+    /* =========================================================================
+       ACTIVITY 7: SHUFFLED REPORTED SPEECH SENTENCES + TTS AUDIO
+    ========================================================================= */
+    function initActivity7() {
+      ACT7_ITEMS.forEach((item) => {
+        const cleanWords = item.sentence.replace(/\.$/, "").split(" ");
+        const tokens = cleanWords.map((w, idx) => ({ uid: `${item.id}-${idx}`, word: w }));
+        // Shuffle tokens
+        const shuffled = [...tokens];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        state.scrambleState[item.id] = {
+          bank: shuffled,
+          answer: []
+        };
+      });
+      renderActivity7();
+    }
+
+    function speakSentence(sentenceText) {
+      if (!("speechSynthesis" in window)) {
+        showToast("Text-to-speech audio is not supported in this browser.", "🔇");
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(sentenceText);
+      utterance.lang = "en-US";
+      utterance.rate = 0.92;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function renderActivity7() {
+      const container = document.getElementById("act7Container");
+      const locked = state.activities[7].checked;
+
+      container.innerHTML = ACT7_ITEMS.map((item) => {
+        const s = state.scrambleState[item.id];
+        const answerTilesHtml = s.answer.length
+          ? s.answer
+              .map(
+                (tok, idx) => `
+              <button
+                type="button"
+                draggable="${!locked}"
+                ondragstart="handleDragWord(event, ${item.id}, 'answer', ${idx})"
+                onclick="moveWordBetweenZones(${item.id}, 'answer', ${idx})"
+                class="word-tile ${locked ? "locked-tile" : ""} px-3 py-1.5 rounded-xl bg-sky-600 text-white font-semibold text-xs sm:text-sm shadow-sm hover:bg-sky-700"
+              >
+                ${tok.word}
+              </button>
+            `
+              )
+              .join("")
+          : `<span class="text-xs text-slate-400 italic select-none">Drag or tap words below to build sentence #${item.id}...</span>`;
+
+        const bankTilesHtml = s.bank
+          .map(
+            (tok, idx) => `
+            <button
+              type="button"
+              draggable="${!locked}"
+              ondragstart="handleDragWord(event, ${item.id}, 'bank', ${idx})"
+              onclick="moveWordBetweenZones(${item.id}, 'bank', ${idx})"
+              class="word-tile ${locked ? "locked-tile" : ""} px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-100 font-semibold text-xs sm:text-sm shadow-sm hover:border-sky-400"
+            >
+              ${tok.word}
+            </button>
+          `
+          )
+          .join("");
+
+        return `
+          <div id="act7-card-${item.id}" class="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div class="flex items-center gap-2">
+                <span class="text-sm font-extrabold text-slate-900 dark:text-white">Sentence #${item.id}</span>
+                <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300">
+                  Verb: ${item.verb}
+                </span>
+              </div>
+              <button
+                type="button"
+                onclick="speakSentence('${item.sentence.replace(/'/g, "\\'")}')"
+                class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition flex items-center gap-1.5"
+              >
+                <span>🔊</span>
+                <span>Listen to Sentence</span>
+              </button>
+            </div>
+
+            <!-- Answer Drop Zone (Shiny Blue Border) -->
+            <div
+              id="act7-drop-${item.id}"
+              ondragover="event.preventDefault()"
+              ondrop="handleDropWord(event, ${item.id}, 'answer')"
+              class="shiny-blue-box min-h-[54px] p-3 rounded-2xl bg-white dark:bg-slate-950 flex flex-wrap items-center gap-2 mb-3"
+            >
+              ${answerTilesHtml}
+            </div>
+
+            <!-- Shuffled Word Bank -->
+            <div
+              ondragover="event.preventDefault()"
+              ondrop="handleDropWord(event, ${item.id}, 'bank')"
+              class="min-h-[46px] p-2.5 rounded-xl bg-slate-200/70 dark:bg-slate-900/60 flex flex-wrap items-center gap-2"
+            >
+              ${bankTilesHtml}
+            </div>
+
+            <div id="act7-hint-${item.id}" class="hidden mt-2.5 text-xs font-bold"></div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function handleDragWord(ev, itemId, fromZone, index) {
+      if (state.activities[7].checked) return;
+      ev.dataTransfer.setData("text/plain", JSON.stringify({ itemId, fromZone, index }));
+    }
+
+    function handleDropWord(ev, targetItemId, toZone) {
+      ev.preventDefault();
+      if (state.activities[7].checked) return;
+      const raw = ev.dataTransfer.getData("text/plain");
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      if (data.itemId !== targetItemId) return;
+
+      const s = state.scrambleState[targetItemId];
+      const [movedToken] = s[data.fromZone].splice(data.index, 1);
+      if (movedToken) {
+        s[toZone].push(movedToken);
+        renderActivity7();
+      }
+    }
+
+    function moveWordBetweenZones(itemId, fromZone, index) {
+      if (state.activities[7].checked) return;
+      const toZone = fromZone === "bank" ? "answer" : "bank";
+      const s = state.scrambleState[itemId];
+      const [movedToken] = s[fromZone].splice(index, 1);
+      if (movedToken) {
+        s[toZone].push(movedToken);
+        renderActivity7();
+      }
+    }
+
+    function checkActivity7() {
+      if (state.activities[7].checked) return;
+
+      let score = 0;
+      const resultsLog = {};
+
+      ACT7_ITEMS.forEach((item) => {
+        const s = state.scrambleState[item.id];
+        const builtSentence = s.answer.map((t) => t.word).join(" ");
+        const expected = item.sentence.replace(/\.$/, "");
+        const isCorrect = builtSentence === expected;
+        resultsLog[item.id] = isCorrect;
+        if (isCorrect) score++;
+      });
+
+      state.activities[7].checked = true;
+      state.activities[7].score = score;
+      document.getElementById("checkBtn-7").disabled = true;
+      document.getElementById("checkBtn-7").classList.add("opacity-50", "cursor-not-allowed");
+
+      renderActivity7();
+
+      // Apply locked visual states & hints after re-render
+      ACT7_ITEMS.forEach((item) => {
+        const dropEl = document.getElementById(`act7-drop-${item.id}`);
+        const hintEl = document.getElementById(`act7-hint-${item.id}`);
+        hintEl.classList.remove("hidden");
+
+        if (resultsLog[item.id]) {
+          dropEl.classList.add("locked-correct");
+          hintEl.className = "mt-2.5 text-xs font-bold text-emerald-700 dark:text-emerald-400";
+          hintEl.innerHTML = `✅ Perfect word order!`;
+        } else {
+          dropEl.classList.add("locked-incorrect");
+          hintEl.className = "mt-2.5 text-xs font-bold text-rose-700 dark:text-rose-400";
+          hintEl.innerHTML = `❌ Correct Order: <span class="underline">${item.sentence}</span>`;
+        }
+      });
+
+      const fb = document.getElementById("feedback-7");
+      fb.classList.remove("hidden");
+      fb.className = "mt-4 p-4 rounded-2xl border border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-900 dark:text-emerald-200 text-sm font-semibold";
+      fb.innerHTML = `🔤 <strong>Activity 7 Results:</strong> You constructed <strong>${score} out of 10</strong> reported speech sentences accurately (${Math.round((score / 10) * 100)}%).`;
+
+      markActivityBadgeChecked(7, score, 10);
+    }
+
+    /* =========================================================================
+       SUBMIT WORKSHEET, GENERATE CHARTS & 8 SPECIFIC RECOMMENDATIONS, PRINT
+    ========================================================================= */
+    function submitWorksheet() {
+      updateStudentMeta();
+
+      const totalEarned = Object.values(state.activities).reduce((acc, a) => acc + a.score, 0);
+      const totalMax = Object.values(state.activities).reduce((acc, a) => acc + a.max, 0);
+      const checkedActivities = Object.values(state.activities).filter((a) => a.checked);
+      const overallPct = Math.round((totalEarned / totalMax) * 100);
+
+      // Update Header Info on Report
+      document.getElementById("reportStudentName").textContent = state.studentName || "Student (Name Not Entered)";
+      document.getElementById("reportStudentDate").textContent = state.studentDate || new Date().toISOString().split("T")[0];
+      document.getElementById("reportCompletedCount").textContent = `${checkedActivities.length} / 7`;
+      document.getElementById("reportOverallPercent").textContent = `${overallPct}%`;
+
+      // Grade Badge
+      let gradeText = "Keep Practicing";
+      if (overallPct >= 90) gradeText = "A • Outstanding Mastery";
+      else if (overallPct >= 80) gradeText = "B • Strong Command";
+      else if (overallPct >= 70) gradeText = "C • Solid Progress";
+      else if (overallPct >= 60) gradeText = "D • Developing Skills";
+      document.getElementById("reportGradeLabel").textContent = gradeText;
+
+      // Personalized Teacher Feedback
+      const studentDisplay = state.studentName || "Student";
+      let feedbackHtml = "";
+      if (checkedActivities.length < 7) {
+        feedbackHtml = `<p class="font-bold text-base mb-1">📋 Partial Submission Report for ${studentDisplay}</p>
+        <p class="text-sm">You have checked <strong>${checkedActivities.length} of 7</strong> activities so far, earning <strong>${totalEarned} / ${totalMax} total points (${overallPct}%)</strong>. You can return to any unchecked activity to complete it and boost your overall mastery score!</p>`;
+      } else if (overallPct >= 85) {
+        feedbackHtml = `<p class="font-bold text-base mb-1">🌟 Exceptional Work, ${studentDisplay}!</p>
+        <p class="text-sm">You achieved an impressive <strong>${overallPct}% (${totalEarned}/${totalMax} pts)</strong> across all seven activities. You demonstrate strong control over tense backshifting, reporting verbs, listening comprehension, and analytical reading.</p>`;
+      } else {
+        feedbackHtml = `<p class="font-bold text-base mb-1">👏 Good Effort, ${studentDisplay}!</p>
+        <p class="text-sm">You earned <strong>${totalEarned} / ${totalMax} points (${overallPct}%)</strong>. Review the colorful breakdown charts and Mr. Rocha’s 8 specific recommendations below to strengthen your reported speech accuracy.</p>`;
+      }
+      document.getElementById("reportTeacherFeedback").innerHTML = feedbackHtml;
+
+      // 1. Render Colorful Bar Chart
+      const barColors = [
+        "from-sky-400 to-blue-600",
+        "from-purple-400 to-indigo-600",
+        "from-emerald-400 to-teal-600",
+        "from-amber-400 to-orange-600",
+        "from-pink-400 to-rose-600",
+        "from-cyan-400 to-sky-600",
+        "from-violet-400 to-purple-600"
+      ];
+
+      const barChartEl = document.getElementById("colorfulBarChart");
+      barChartEl.innerHTML = [1, 2, 3, 4, 5, 6, 7]
+        .map((num, idx) => {
+          const act = state.activities[num];
+          const pct = Math.round((act.score / act.max) * 100);
+          const heightPct = act.checked ? Math.max(pct, 8) : 4;
+          return `
+            <div class="flex-1 h-full flex flex-col items-center justify-end group">
+              <span class="text-[11px] font-extrabold text-slate-700 dark:text-slate-200 mb-1">
+                ${act.checked ? pct + "%" : "—"}
+              </span>
+              <div
+                style="height: ${heightPct}%"
+                class="w-full max-w-[44px] rounded-t-xl bg-gradient-to-t ${
+                  act.checked ? barColors[idx] : "from-slate-300 to-slate-400 dark:from-slate-700 dark:to-slate-600"
+                } shadow-md transition-all duration-500"
+                title="${act.label}: ${act.score}/${act.max}"
+              ></div>
+            </div>
+          `;
+        })
+        .join("");
+
+      // 2. Render Doughnut Chart
+      let earnedPts = 0;
+      let missedPts = 0;
+      let pendingPts = 0;
+      Object.values(state.activities).forEach((a) => {
+        if (a.checked) {
+          earnedPts += a.score;
+          missedPts += a.max - a.score;
+        } else {
+          pendingPts += a.max;
+        }
+      });
+
+      const earnedPct = (earnedPts / totalMax) * 100;
+      const missedPct = (missedPts / totalMax) * 100;
+
+      document.getElementById("donutEarnedSeg").setAttribute("stroke-dasharray", `${earnedPct} ${100 - earnedPct}`);
+      document.getElementById("donutMissedSeg").setAttribute("stroke-dasharray", `${missedPct} ${100 - missedPct}`);
+      document.getElementById("donutMissedSeg").setAttribute("stroke-dashoffset", `${-earnedPct}`);
+      document.getElementById("donutCenterScore").textContent = `${overallPct}%`;
+
+      document.getElementById("legendEarned").textContent = `${earnedPts} pts (${Math.round(earnedPct)}%)`;
+      document.getElementById("legendMissed").textContent = `${missedPts} pts (${Math.round(missedPct)}%)`;
+      document.getElementById("legendPending").textContent = `${pendingPts} pts (${Math.round((pendingPts / totalMax) * 100)}%)`;
+
+      // 3. Render Colorful Skill Horizontal Bars
+      const skills = [
+        {
+          name: "Grammar Transformation (Act 3)",
+          pct: Math.round((state.activities[3].score / state.activities[3].max) * 100),
+          color: "bg-gradient-to-r from-sky-500 to-blue-600"
+        },
+        {
+          name: "Listening & Dictation (Act 1 & 4)",
+          pct: Math.round(
+            ((state.activities[1].score + state.activities[4].score) /
+              (state.activities[1].max + state.activities[4].max)) *
+              100
+          ),
+          color: "bg-gradient-to-r from-emerald-500 to-teal-600"
+        },
+        {
+          name: "Reading Comprehension (Act 2 & 6)",
+          pct: Math.round(
+            ((state.activities[2].score + state.activities[6].score) /
+              (state.activities[2].max + state.activities[6].max)) *
+              100
+          ),
+          color: "bg-gradient-to-r from-purple-500 to-indigo-600"
+        },
+        {
+          name: "Sentence Construction (Act 7)",
+          pct: Math.round((state.activities[7].score / state.activities[7].max) * 100),
+          color: "bg-gradient-to-r from-amber-500 to-orange-500"
+        },
+        {
+          name: "Visual Observation (Act 5)",
+          pct: Math.round((state.activities[5].score / state.activities[5].max) * 100),
+          color: "bg-gradient-to-r from-pink-500 to-rose-600"
+        }
+      ];
+
+      document.getElementById("skillBarsContainer").innerHTML = skills
+        .map(
+          (sk) => `
+          <div>
+            <div class="flex justify-between text-xs font-bold mb-1">
+              <span class="text-slate-700 dark:text-slate-200">${sk.name}</span>
+              <span class="text-slate-900 dark:text-white">${sk.pct}%</span>
+            </div>
+            <div class="w-full h-3 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+              <div class="h-full ${sk.color} rounded-full transition-all duration-500" style="width: ${sk.pct}%"></div>
+            </div>
+          </div>
+        `
+        )
+        .join("");
+
+      // 4. Render Detailed Activity Table
+      document.getElementById("activityBreakdownTableBody").innerHTML = [1, 2, 3, 4, 5, 6, 7]
+        .map((num) => {
+          const a = state.activities[num];
+          const pct = Math.round((a.score / a.max) * 100);
+          return `
+            <tr>
+              <td class="px-3 py-2.5 font-semibold text-slate-800 dark:text-slate-200">${a.label}</td>
+              <td class="px-3 py-2.5">
+                ${
+                  a.checked
+                    ? '<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300">Checked</span>'
+                    : '<span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300">Unchecked</span>'
+                }
+              </td>
+              <td class="px-3 py-2.5 font-bold">${a.score} / ${a.max}</td>
+              <td class="px-3 py-2.5 font-extrabold text-sky-600 dark:text-sky-400">${a.checked ? pct + "%" : "0%"}</td>
+            </tr>
+          `;
+        })
+        .join("");
+
+      // 5. Generate 8 Specific Recommendations Based on User Answers & Results
+      generateEightRecommendations();
+
+      // Navigate to Results Screen (scrolls to top)
+      goToSection(8);
+    }
+
+    function generateEightRecommendations() {
+      const a1 = state.activities[1];
+      const a2 = state.activities[2];
+      const a3 = state.activities[3];
+      const a4 = state.activities[4];
+      const a5 = state.activities[5];
+      const a6 = state.activities[6];
+      const a7 = state.activities[7];
+
+      const recs = [
+        {
+          num: 1,
+          title: "Tense Backshifting Precision",
+          badge: a3.checked ? `Activity 3: ${a3.score}/20` : "Activity 3 Pending",
+          color: "border-sky-400",
+          text:
+            !a3.checked || a3.score < 16
+              ? "Review Chart A in Activity 3: practice shifting Present Simple to Past Simple, Past Simple to Past Perfect ('had + past participle'), and 'will' to 'would' in affirmative and negative clauses."
+              : "Your tense backshifting in Activity 3 is strong! Challenge yourself next by reporting mixed-tense news articles using 'had been' and 'would have'."
+        },
+        {
+          num: 2,
+          title: "Time & Place Word Transformations",
+          badge: a3.checked ? `Grammar Drill` : "Unchecked",
+          color: "border-indigo-400",
+          text:
+            !a3.checked || a3.score < 18
+              ? "Double-check demonstrative and time shifts from Chart B: remember to convert 'now → then', 'tomorrow → the next day', 'yesterday → the day before', and 'these → those'."
+              : "You accurately converted time and place expressions ('today', 'tomorrow', 'here', 'these'). Keep applying these shifts consistently in spoken storytelling."
+        },
+        {
+          num: 3,
+          title: "Reported Questions Word Order",
+          badge: a3.checked ? `Interrogatives` : "Practice Needed",
+          color: "border-amber-400",
+          text:
+            !a3.checked || a3.score < 15
+              ? "When reporting questions (#13–16 in Activity 3), remove auxiliary 'do/does/did', use 'if/whether' for Yes/No questions, and keep Subject + Verb order without a question mark."
+              : "You handled reported Yes/No and Wh- questions cleanly! Continue avoiding inverted auxiliary verbs when embedding questions."
+        },
+        {
+          num: 4,
+          title: "Reporting Verbs & Infinitive / Gerund Patterns",
+          badge: a7.checked ? `Activity 7: ${a7.score}/10` : "Activity 7 Pending",
+          color: "border-emerald-400",
+          text:
+            !a7.checked || a7.score < 8
+              ? "Pay close attention to verb patterns after reporting verbs in Activity 7: use 'to + verb' after promise/advise/remind, 'not to + verb' after warn, and '-ing' after suggest/deny."
+              : "Excellent command of reporting verb syntax in Activity 7! You correctly paired 'suggested', 'denied', 'warned', and 'promised' with their grammatical structures."
+        },
+        {
+          num: 5,
+          title: "Active Audio Listening & Dictation Accuracy",
+          badge: a4.checked ? `Activity 4: ${a4.score}/8` : "Activity 4 Pending",
+          color: "border-teal-400",
+          text:
+            !a4.checked || a4.score < 6
+              ? "Replay Audio1–Audio8 in Activity 4 while shadowing the speaker out loud. Focus on hearing unstressed function words like 'that', 'whether', and past-tense '-ed' endings."
+              : "Your listening dictation accuracy in Activity 4 is impressive! Try transcribing short English podcast clips to further sharpen your ear."
+        },
+        {
+          num: 6,
+          title: "Evidence-Based Reading Comprehension",
+          badge: a6.checked ? `Activity 6: ${a6.score}/6` : "Activity 6 Pending",
+          color: "border-rose-400",
+          text:
+            !a6.checked || a6.score < 5
+              ? "Re-read 'The Real Sherlock Holmes' in Activity 6 and underline reporting verbs ('warned', 'explained', 'denied', 'insisted') to trace how Dr. Joseph Bell supported conclusions with evidence."
+              : "You excelled on 'The Real Sherlock Holmes' comprehension check! Apply Dr. Bell’s habit of testing every conclusion against textual evidence."
+        },
+        {
+          num: 7,
+          title: "Written Summarization & Paraphrasing",
+          badge: a1.checked && a2.checked ? `Acts 1 & 2: ${a1.score + a2.score}/20` : "Reflection Tasks",
+          color: "border-purple-400",
+          text:
+            !a1.checked || !a2.checked || a1.score + a2.score < 16
+              ? "Expand your written responses in Activities 1 and 2 by summarizing what characters said using reporting verbs ('The speaker explained that...', 'The story showed that...')."
+              : "Your written summaries in Activities 1 and 2 are thoughtful and clear. Keep integrating reported speech clauses into your academic paragraphs."
+        },
+        {
+          num: 8,
+          title: "Visual Attention to Detail & Completion",
+          badge: a5.checked ? `Activity 5: ${a5.score}/24` : "Puzzle Pending",
+          color: "border-pink-400",
+          text:
+            !a5.checked || a5.score < 20
+              ? "Complete all 7 activities (including all 24 squares of Image3 in Activity 5) before final printing. Careful visual observation of edges and details strengthens both puzzle solving and grammar editing."
+              : "Your visual observation in the 24-piece puzzle and overall worksheet discipline are top-notch! Keep reviewing your work systematically."
+        }
+      ];
+
+      document.getElementById("recommendationsGrid").innerHTML = recs
+        .map(
+          (r) => `
+          <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border-l-4 ${r.color} shadow-sm border border-slate-200 dark:border-slate-700">
+            <div class="flex items-center justify-between gap-2 mb-1.5">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-100">
+                ${r.num}. ${r.title}
+              </span>
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                ${r.badge}
+              </span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              ${r.text}
+            </p>
+          </div>
+        `
+        )
+        .join("");
+    }
+
+    function printWorksheetResults() {
+      // Ensure we are on the results panel and scrolled to the top before printing
+      goToSection(8);
+      window.scrollTo(0, 0);
+      setTimeout(() => {
+        window.print();
+      }, 150);
+    }
+
+    /* =========================================================================
+       INITIALIZE ON WINDOW LOAD
+    ========================================================================= */
+    window.onload = function () {
+      // Default calendar to today's date
+      const today = new Date().toISOString().split("T")[0];
+      document.getElementById("studentDateInput").value = today;
+      state.studentDate = today;
+
+      renderActivity3();
+      renderActivity4();
+      initPuzzle();
+      renderActivity6();
+      initActivity7();
+      updateProgressBar();
+    };
+  </script>
+</body>
+</html>
